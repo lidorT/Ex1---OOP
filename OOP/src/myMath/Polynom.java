@@ -325,6 +325,16 @@ public class Polynom implements Polynom_able {
 			m.multiply(m1);
 		}
 	}
+	
+//	public function initFromString(String s){
+//		
+//		
+//		
+//		
+//	}
+	
+	
+	
 
 	/**
 	 * This function prints as a string the current Polynom.

@@ -66,6 +66,25 @@ public class Monom implements function {
 	// ***************** add your code below **********************
 
 
+	
+public function initFromString(String s){
+		
+		String temp;
+		temp = s.substring(0, s.indexOf('='));
+		temp = temp.toLowerCase();
+		if(temp.charAt(0) != 'y' || temp.charAt(1)!= '=' ){
+			throw new RuntimeException("You entered an invaild input, please enter a function at the form of: y=f(x)");
+		}
+		
+		function f = new Monom(s.substring(s.charAt('=')+1));
+		
+		
+		return f;
+		
+		
+	}
+	
+	
 	/**
 	 * This functioin responsible to build a Monom from the input string.
 	 * If the string contains more than 1 power symbol ('^') or more than one x we throw exception.
@@ -264,7 +283,8 @@ public class Monom implements function {
 		} else
 			return this._coefficient + "x^" + this._power;
 	}
-
+	
+	
 	/**
 	 * This function checks if two monoms are equals.
 	 * We create two strings and convert the Monoms into strings using the toString<object> function.
