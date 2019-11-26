@@ -3,7 +3,7 @@ package myMath;
 import org.junit.Test;
 
 public class PolynomTestJunit {
-//lidor
+//Lidor and Zohar
 	@Test
 	public void testFx(){
 		System.out.println("testFx: ");
