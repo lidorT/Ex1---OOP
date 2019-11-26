@@ -29,6 +29,23 @@ public class Polynom implements Polynom_able {
 		this.Monoms_List.add(new Monom(0, 0));
 	}
 
+	
+	public function initFromString(String s){
+		
+		String temp;
+		temp = s.substring(0, s.indexOf('='));
+		temp = temp.toLowerCase();
+		if(temp.charAt(0) != 'y' || temp.charAt(1)!= '=' ){
+			throw new RuntimeException("You entered an invaild input, please enter a function at the form of: y=f(x)");
+		}
+		function f = new Polynom(s.substring(s.charAt('=')+1));
+		
+		return f;
+	}
+	
+	
+	
+	
 	/**
 	 * Init a Polynom from a String such as: {"x", "3+1.4x^3-34x","3x^3+2x-5"}.
 	 * This constructor runs on the string and save each monom, we know to divide them when we find the characters "-" or "+".
