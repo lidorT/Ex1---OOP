@@ -278,6 +278,20 @@ public class Polynom implements Polynom_able {
 		}
 		return p1;
 	}
+	
+	public function copyF() {
+		Polynom p1 = new Polynom();
+		function f = new Polynom();
+		Iterator<Monom> iterpoly = this.iteretor();
+		while (iterpoly.hasNext()) {
+			Monom m = new Monom(iterpoly.next());
+			p1.add(m);
+		}
+		f=p1;
+		return f;
+	}
+	
+	
 
 	/**
 	 * This function derivative the current polynom and returns it as a Polynom_able.
