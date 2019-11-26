@@ -75,13 +75,9 @@ public function initFromString(String s){
 		if(temp.charAt(0) != 'y' || temp.charAt(1)!= '=' ){
 			throw new RuntimeException("You entered an invaild input, please enter a function at the form of: y=f(x)");
 		}
-		
 		function f = new Monom(s.substring(s.charAt('=')+1));
 		
-		
 		return f;
-		
-		
 	}
 	
 	
