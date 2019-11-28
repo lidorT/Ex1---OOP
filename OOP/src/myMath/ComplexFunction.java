@@ -23,10 +23,8 @@ public class ComplexFunction implements complex_function{
 	 *					      (left)x^3+2x  	 	    (right) - x^5+x^2
 	 */
 	class Node {
-		
 		Operation op=Operation.None;
 		function f;
-		
 	}
 	
 	/*
@@ -131,14 +129,8 @@ public class ComplexFunction implements complex_function{
 	 */
 	public void max(function f1) {
 		
-		double checkLeft, checkRight;
 		
-		checkLeft = this.f(2);
-		checkRight= f1.f(2);
-		
-		if (checkLeft>checkRight) return this;
-		else return f1;
-		
+	
 		
 	}
 	
@@ -163,7 +155,21 @@ public class ComplexFunction implements complex_function{
 	 * @return a function representing the left side of this complex funcation
 	 */
 	public function left() {
-		return null;
+		
+		Node Pointer = new Node();
+		Pointer.f=this.function_list.get(0).f;
+		Pointer.op=this.function_list.get(0).op;
+		Iterator<Node> functionIter = iteretor();
+		ComplexFunction cf = new ComplexFunction();
+		
+		while (iteretor().next().op != Operation.None){
+			Node temp = new Node();
+			temp.f = Pointer.f;
+			temp.op = Pointer.op;
+			cf.function_list.add(temp);
+			Pointer = functionIter.next();
+		}
+		return cf;
 	}
 	
 	
@@ -171,7 +177,21 @@ public class ComplexFunction implements complex_function{
 	 * @return a function representing the left side of this complex funcation
 	 */
 	public function right() {
-		return null;
+		Node Pointer = new Node();
+		Iterator<Node> functionIter = iteretor();
+		while (iteretor().hasNext()){
+			Pointer=functionIter.next();
+		}
+
+		ComplexFunction cf = new ComplexFunction();
+		
+		Node temp = new Node();
+		temp.f=Pointer.f;
+		temp.op=Pointer.op;
+		
+		cf.function_list.add(temp);
+		
+		return cf;
 	}
 	
 	
@@ -180,22 +200,44 @@ public class ComplexFunction implements complex_function{
 	 * @return
 	 */
 	public Operation getOp() {
-		return null;
+		Node Pointer = new Node();
+		
+		Iterator<Node> functionIter = iteretor();
+		
+		
+		while (iteretor().next().op != Operation.None){
+			
+			Pointer=functionIter.next();
+			
+			
+		}
+		
+		return Pointer.op;
+		
 	}
 	
 	
-	// edit it when needed
-//	public function copyF() {
-//		Polynom p1 = new Polynom();
-//		function f = new Polynom();
-//		Iterator<Monom> iterpoly = this.iteretor();
-//		while (iterpoly.hasNext()) {
-//			Monom m = new Monom(iterpoly.next());
-//			p1.add(m);
-//		}
-//		f=p1;
-//		return f;
-//	}
+	 
+	public function copy() {
+		Node Pointer = new Node();
+		Pointer.f=this.function_list.get(0).f;
+		Pointer.op=this.function_list.get(0).op;
+		ComplexFunction cf = new ComplexFunction();
+		Iterator<Node> functionIter = iteretor();
+		
+		
+		while (iteretor().hasNext()){
+			Node temp = new Node();
+			temp.f=Pointer.f;
+			temp.op=Pointer.op;
+			cf.function_list.add(temp);
+			Pointer=functionIter.next();
+			
+			
+		}
+		
+		return cf;
+	}
 	
 	
 	
@@ -212,7 +254,18 @@ public class ComplexFunction implements complex_function{
 	
 	
 	
-	
+	private void Clean(String s){
+		
+		
+		
+		if (s.charAt(0)=='(' && s.charAt(s.length())==')'){
+			
+			s=s.substring(1,s.length()-1);
+			
+		}
+		
+		
+	}
 	
 	
 	
