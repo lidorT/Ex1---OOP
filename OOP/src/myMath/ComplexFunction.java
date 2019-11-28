@@ -130,6 +130,16 @@ public class ComplexFunction implements complex_function{
 	 * @param f1 the complex_function which will be compared with this complex_function - to compute the maximum.
 	 */
 	public void max(function f1) {
+		
+		double checkLeft, checkRight;
+		
+		checkLeft = this.f(2);
+		checkRight= f1.f(2);
+		
+		if (checkLeft>checkRight) return this;
+		else return f1;
+		
+		
 	}
 	
 	
