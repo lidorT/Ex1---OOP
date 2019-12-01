@@ -252,6 +252,7 @@ public class ComplexFunction implements complex_function{
 		String min = "min";
 		int column_counter=0;
 		
+		
 		s=clear_spaces(s);
 		s=s.toLowerCase();
 		
