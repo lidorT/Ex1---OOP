@@ -14,6 +14,8 @@ public class MonomTestJunit {
 		Monom m2 = new Monom(m1);
 		m2.add(m1);
 		System.out.println(m1+" + "+m1+" = "+m2);
+		function f = m1.copy();
+		System.out.println(f.toString());
 	}
 
 

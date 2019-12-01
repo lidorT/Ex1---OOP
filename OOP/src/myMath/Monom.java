@@ -2,6 +2,7 @@ package myMath;
 
 import java.util.Comparator;
 
+
 /**
  * This class represents a simple "Monom" of shape a*x^b, where a is a real
  * number and a is an integer (summed a none negative), The class implements function and
@@ -11,6 +12,10 @@ import java.util.Comparator;
  */
 public class Monom implements function {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final Monom ZERO = new Monom(0, 0);
 	public static final Monom MINUS1 = new Monom(-1, 0);
 	public static final double EPSILON = 0.0000001;
@@ -65,9 +70,7 @@ public class Monom implements function {
 
 	// ***************** add your code below **********************
 
-
-	
-public function initFromString(String s){
+	public function initFromString(String s){
 		
 		String temp;
 		temp = s.substring(0, s.indexOf('='));
@@ -300,6 +303,14 @@ public function initFromString(String s){
 
 		return ans;
 	}
+	
+	
+	public function copy() {
+		Monom m = new Monom(this);
+		function f = new Monom(m);
+		return f;
+	}
+	
 	
 	// *************************************************************
 	// ****************** Private Methods and Data *****************

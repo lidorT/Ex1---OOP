@@ -6,6 +6,7 @@ import java.io.Serializable;
 **/
 public interface function extends Serializable{
 	
+	
 	public double f(double x);
 	/** 
 	 * return a String representing this complex function
