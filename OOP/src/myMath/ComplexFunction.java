@@ -35,7 +35,7 @@ public class ComplexFunction implements complex_function{
 	 * after that we store the nodes in the complex function array list.
 	 */
 	private ArrayList<Node> function_list = new ArrayList<>(); 
-	
+	public String function_by_string;
 	
 	/*
 	 * deffult constractor.
@@ -240,6 +240,36 @@ public class ComplexFunction implements complex_function{
 	}
 	
 	
+	public function initFromString(String s) {
+		
+		
+		ComplexFunction cf = new ComplexFunction();
+		cf.function_by_string=s;
+		String plus = "plus";
+		String div = "div";
+		String mul = "mul";
+		String max = "max";
+		String min = "min";
+		int column_counter=0;
+		
+		s=clear_spaces(s);
+		s=s.toLowerCase();
+		
+		for (int i=0;i<s.length();i++){
+			
+			if (s.charAt(i)==',') column_counter++;
+			
+			
+		}
+		
+			
+		
+		
+		
+		
+	}
+	
+	
 	
 	//// Private Methods:
 	
@@ -251,7 +281,22 @@ public class ComplexFunction implements complex_function{
 		return this.function_list.iterator();
 	}
 	
-	
+	/*
+	 * This function gets a string and returns it without spaces 
+	 * for ex:
+	 * input : "3x^2 + 6x^3"
+	 * output: "3x^2+6x^3"
+	 */
+	private String clear_spaces (String s) {
+		
+		s=s.replaceAll(" ","");
+		
+		return s;
+
+			
+		}
+		
+		
 	
 	
 	private void Clean(String s){
