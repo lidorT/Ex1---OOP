@@ -4,18 +4,24 @@ public class PolynomTest {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		testFx();
-		testAdd();
-		testSubtract();
-		testMultiply();
-		testEquals();
-		testZero();
-		testCopy();
-		testDerivative();
-		testRoot();
-		testArea();
-		testPolynomString();
-		testError();
+		ComplexFunction cf = new ComplexFunction();
+		
+		cf.initFromString("plus(div(+1.0x+1.0,mul(mul(+1.0x+3.0,+1.0x-2.0),+1.0x4.0)),2.0)");
+		
+		
+		
+//		testFx();
+//		testAdd();
+//		testSubtract();
+//		testMultiply();
+//		testEquals();
+//		testZero();
+//		testCopy();
+//		testDerivative();
+//		testRoot();
+//		testArea();
+//		testPolynomString();
+//		testError();
 	}
 
 	public static void testFx(){

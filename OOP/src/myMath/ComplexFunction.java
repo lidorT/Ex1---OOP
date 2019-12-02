@@ -243,30 +243,99 @@ public class ComplexFunction implements complex_function{
 	public function initFromString(String s) {
 		
 		
-		ComplexFunction cf = new ComplexFunction();
-		cf.function_by_string=s;
-		String plus = "plus";
-		String div = "div";
-		String mul = "mul";
-		String max = "max";
-		String min = "min";
+		String oper = "";
+		String func = "";
+
 		int column_counter=0;
-		
+		int left_counter=0;
+		int right_counter=0;
 		
 		s=clear_spaces(s);
 		s=s.toLowerCase();
+		s=s.substring(s.indexOf('=')+1,s.length());
+		
 		
 		for (int i=0;i<s.length();i++){
 			
 			if (s.charAt(i)==',') column_counter++;
+			if (s.charAt(i)=='(')left_counter++;
+			if (s.charAt(i)==')') right_counter++;
+			
+		}
+
+		
+		Node newNode = new Node();
+		int counter=0;
+		for (int i=0;i<s.length();i++) {
+			
+			
+			
+			if (s.charAt(i)=='(')counter++; 
+			
+			if (counter==left_counter-1) {
+				
+				for (int x=i;x<s.length();x++) {
+					
+					
+					oper+=s.charAt(x);
+					if (s.charAt(x)=='(') {
+						
+						if (oper.contains("mul")) {
+							newNode.op=Operation.Times;
+							i=x;
+							System.out.println("i value is "+i);
+							break;
+						}
+						if (oper.contains("plus")) {
+							newNode.op=Operation.Plus;
+							i=x;
+							break;
+						}
+						if (oper.contains("div")) {
+							newNode.op=Operation.Divid;
+							i=x;
+							break;
+						}
+						if (oper.contains("min")) {
+							newNode.op=Operation.Min;
+							i=x;
+							break;
+						}
+						if (oper.contains("max")) {
+							newNode.op=Operation.Max;
+							i=x;
+							break;
+						}
+						if (oper.contains("comp")) {		// needed?
+							newNode.op=Operation.Comp;
+							i=x;
+							break;
+						}
+						
+//						for (int z=i;z<s.length();z++) {
+//							
+//							System.out.println("i value is "+i);
+//							
+//							
+//						}
+						
+						
+					}
+					
+					
+					
+				}
+				
+				
+				
+			}
 			
 			
 		}
 		
-			
 		
 		
-		
+		return null;
 		
 	}
 	
@@ -275,7 +344,22 @@ public class ComplexFunction implements complex_function{
 	//// Private Methods:
 	
 	
-	
+	private static int[] flip_arr_values (int[] arr) {
+		
+		int[] temp = new int[arr.length];
+		int j=0;
+		for (int i=arr.length-1;i>-1;i--) {
+		
+				
+				temp[j]=arr[i];
+				j++;
+			
+			
+		}
+		
+		return temp;
+		
+	}
 	
 	
 	private Iterator<ComplexFunction.Node> iteretor() {
@@ -311,6 +395,13 @@ public class ComplexFunction implements complex_function{
 		}
 		
 		
+	}
+
+
+	@Override
+	public double f(double x) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 	
