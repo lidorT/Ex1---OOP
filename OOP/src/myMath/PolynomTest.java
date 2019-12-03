@@ -6,7 +6,18 @@ public class PolynomTest {
 
 		ComplexFunction cf = new ComplexFunction();
 		
-		cf.initFromString("plus(div(+1.0x+1.0,mul(mul(+1.0x+3.0,+1.0x-2.0),+1.0x4.0)),2.0)");
+		cf.initFromString("plus(plus(+1.0x+1.0,mul(mul(+1.0x+3.0,+1.0x-2.0),+1.0x+4.0)),2.0)");
+		
+		//System.out.println(cf.toString());
+	
+		
+		
+		//System.out.println("Close index check: "+ComplexFunction.Close_Index(str));
+		
+		//System.out.println("Close index check: "+ComplexFunction.Open_Index(ComplexFunction.Close_Index(str),str));
+		
+		//System.out.println("Close index check: "+ComplexFunction.Column_Index(ComplexFunction.Close_Index(str),str));
+		
 		
 		
 		
