@@ -35,7 +35,7 @@ public class ComplexFunction implements complex_function{
 	 * after that we store the nodes in the complex function array list.
 	 */
 	private ArrayList<Node> function_list = new ArrayList<>(); 
-	
+	public String function_by_string;
 	
 	/*
 	 * deffult constractor.
@@ -240,18 +240,148 @@ public class ComplexFunction implements complex_function{
 	}
 	
 	
+	public function initFromString(String s) {
+		
+		
+		String oper = "";
+		String func = "";
+
+		int column_counter=0;
+		int left_counter=0;
+		int right_counter=0;
+		
+		s=clear_spaces(s);
+		s=s.toLowerCase();
+		s=s.substring(s.indexOf('=')+1,s.length());
+		
+		
+		for (int i=0;i<s.length();i++){
+			
+			if (s.charAt(i)==',') column_counter++;
+			if (s.charAt(i)=='(')left_counter++;
+			if (s.charAt(i)==')') right_counter++;
+			
+		}
+
+		
+		Node newNode = new Node();
+		int counter=0;
+		for (int i=0;i<s.length();i++) {
+			
+			
+			
+			if (s.charAt(i)=='(')counter++; 
+			
+			if (counter==left_counter-1) {
+				
+				for (int x=i;x<s.length();x++) {
+					
+					
+					oper+=s.charAt(x);
+					if (s.charAt(x)=='(') {
+						
+						if (oper.contains("mul")) {
+							newNode.op=Operation.Times;
+							i=x;
+							System.out.println("i value is "+i);
+							break;
+						}
+						if (oper.contains("plus")) {
+							newNode.op=Operation.Plus;
+							i=x;
+							break;
+						}
+						if (oper.contains("div")) {
+							newNode.op=Operation.Divid;
+							i=x;
+							break;
+						}
+						if (oper.contains("min")) {
+							newNode.op=Operation.Min;
+							i=x;
+							break;
+						}
+						if (oper.contains("max")) {
+							newNode.op=Operation.Max;
+							i=x;
+							break;
+						}
+						if (oper.contains("comp")) {		// needed?
+							newNode.op=Operation.Comp;
+							i=x;
+							break;
+						}
+						
+//						for (int z=i;z<s.length();z++) {
+//							
+//							System.out.println("i value is "+i);
+//							
+//							
+//						}
+						
+						
+					}
+					
+					
+					
+				}
+				
+				
+				
+			}
+			
+			
+		}
+		
+		
+		
+		return null;
+		
+	}
+	
+	
 	
 	//// Private Methods:
 	
 	
-	
+	private static int[] flip_arr_values (int[] arr) {
+		
+		int[] temp = new int[arr.length];
+		int j=0;
+		for (int i=arr.length-1;i>-1;i--) {
+		
+				
+				temp[j]=arr[i];
+				j++;
+			
+			
+		}
+		
+		return temp;
+		
+	}
 	
 	
 	private Iterator<ComplexFunction.Node> iteretor() {
 		return this.function_list.iterator();
 	}
 	
-	
+	/*
+	 * This function gets a string and returns it without spaces 
+	 * for ex:
+	 * input : "3x^2 + 6x^3"
+	 * output: "3x^2+6x^3"
+	 */
+	private String clear_spaces (String s) {
+		
+		s=s.replaceAll(" ","");
+		
+		return s;
+
+			
+		}
+		
+		
 	
 	
 	private void Clean(String s){
@@ -265,6 +395,13 @@ public class ComplexFunction implements complex_function{
 		}
 		
 		
+	}
+
+
+	@Override
+	public double f(double x) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 	
