@@ -31,9 +31,9 @@ class Functions_GUITest {
 		data.drawFunctions(w,h,rx,ry,res);
 	}
 	private Functions_GUI _data=null;
-//	@BeforeAll
-//	static void setUpBeforeClass() throws Exception {
-//	}
+	//	@BeforeAll
+	//	static void setUpBeforeClass() throws Exception {
+	//	}
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -42,23 +42,23 @@ class Functions_GUITest {
 
 	//@Test
 	void testFunctions_GUI() {
-	//	fail("Not yet implemented");
+		//	fail("Not yet implemented");
 	}
 
 	//@Test
 	void testInitFromFile() {
-	//	fail("Not yet implemented");
+		//	fail("Not yet implemented");
 	}
 
 	//@Test
 	void testSaveToFile() {
-	//	fail("Not yet implemented");
+		//	fail("Not yet implemented");
 	}
 
 	//@Test
 	void testDrawFunctions() {
 		//_data.drawFunctions();
-	//	fail("Not yet implemented");
+		//	fail("Not yet implemented");
 	}
 
 	@Test
@@ -78,7 +78,7 @@ class Functions_GUITest {
 		for(int i=1;i<s3.length;i++) {
 			cf3.mul(new Polynom(s3[i]));
 		}
-		
+
 		ComplexFunction cf = new ComplexFunction("plus", p1,p2);
 		ComplexFunction cf4 = new ComplexFunction("div", new Polynom("x +1"),cf3);
 		cf4.plus(new Monom("2"));
@@ -99,7 +99,7 @@ class Functions_GUITest {
 		}
 		ans.add(max);
 		ans.add(min);
-		
+
 		return ans;
 	}
 }

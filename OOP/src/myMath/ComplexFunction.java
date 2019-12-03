@@ -267,7 +267,7 @@ public class ComplexFunction implements complex_function{
 		ComplexFunction ans = new ComplexFunction();
 
 		Node pointer = new Node();
-		
+
 		while(temp.length() != 0) {
 
 			int end = Close_Index(temp);
@@ -277,49 +277,49 @@ public class ComplexFunction implements complex_function{
 			int Case = Check_case(start,column,end,temp);
 			ComplexFunction cf = new ComplexFunction();
 
-			
-			if(Case == 1){
-				
-			cf = initHelper(start,column,end,temp);
-			Node n = new Node();
-			n.f = cf;
-			n.op = Operation.None;
 
-			ans.function_list.add(n);
-			pointer = n;
-			
+			if(Case == 1){
+
+				cf = initHelper(start,column,end,temp);
+				Node n = new Node();
+				n.f = cf;
+				n.op = Operation.None;
+
+				ans.function_list.add(n);
+				pointer = n;
+
 			}
 
 			if(Case == 2){
-				
-			pointer.op =  get_op(start, temp);
-			String s3 = temp.substring(column+1,end);
-			cf = StringToComplex(s3,Operation.None);
-			
-			Node n = new Node();
-			n.f = cf;
-			n.op = Operation.None;
-			pointer = n;
-			
-			ans.function_list.add(n);
-			
-			}
-			
-			if(Case == 3){
-			
+
 				pointer.op =  get_op(start, temp);
-				String s3 = temp.substring(start+1,column);
+				String s3 = temp.substring(column+1,end);
 				cf = StringToComplex(s3,Operation.None);
-				
+
 				Node n = new Node();
 				n.f = cf;
 				n.op = Operation.None;
 				pointer = n;
-				
+
 				ans.function_list.add(n);
-				
+
 			}
-			
+
+			if(Case == 3){
+
+				pointer.op =  get_op(start, temp);
+				String s3 = temp.substring(start+1,column);
+				cf = StringToComplex(s3,Operation.None);
+
+				Node n = new Node();
+				n.f = cf;
+				n.op = Operation.None;
+				pointer = n;
+
+				ans.function_list.add(n);
+
+			}
+
 			int length = get_op_length(start,temp);
 			temp = temp.substring(0, start-length) + temp.substring(end+1);
 
@@ -485,11 +485,11 @@ public class ComplexFunction implements complex_function{
 		String temp=str.substring(Index-3,Index);
 
 		if (temp.equals("mul") || temp.equals("div") || temp.equals("min") || temp.equals("max") ) ans = 3;
-	
+
 		temp=str.substring(Index-4,Index);
 
 		if (temp.equals("plus") || temp.equals("comp")) ans = 4;
-	
+
 		return ans;
 	}
 
@@ -509,12 +509,12 @@ public class ComplexFunction implements complex_function{
 
 		String temp = str;
 		int Case = 1;
-		
+
 		String s1 = str.substring(start+1, column);
 		String s2 = temp.substring(column+1, end);
-		
-			if(s1.equals("")) Case=2;
-			if(s2.equals("")) Case=3;
+
+		if(s1.equals("")) Case=2;
+		if(s2.equals("")) Case=3;
 
 		return Case;
 	}
