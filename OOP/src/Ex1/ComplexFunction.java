@@ -1,4 +1,4 @@
-package myMath;	
+package Ex1;	
 import java.util.*;
 
 public class ComplexFunction implements complex_function{

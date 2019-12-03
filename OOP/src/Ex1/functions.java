@@ -1,4 +1,4 @@
-package myMath;
+package Ex1;
 
 /**
  * This interface represents a collection of mathematical functions

@@ -1,4 +1,4 @@
-package myMath;
+package Ex1;
 
 /**
  * The interfx0ce represents x0 continux0nce function 
