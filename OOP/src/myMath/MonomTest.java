@@ -1,12 +1,23 @@
-package Ex1;
+package myMath;
 
-import org.junit.Test;
+/**
+ * This class represents a simple (naive) tester for the Monom class
+*/
+public class MonomTest {
+	
+	public static void main(String[] args) {
+		testAdd();
+		testMultiply();
+		testSubstract();
+		testIsZero();
+		testDerivative();
+		testFx();
+		testEquals();
+		testMonomString();
+		testError();
+	}
 
-public class MonomTestJunit {
-
-	//lidor
-	@Test
-	public void testAdd() {
+	public static void testAdd() {
 		System.out.println("testAdd: ");
 		double a = 3.5;
 		int b = 2;
@@ -14,13 +25,10 @@ public class MonomTestJunit {
 		Monom m2 = new Monom(m1);
 		m2.add(m1);
 		System.out.println(m1+" + "+m1+" = "+m2);
-		function f = m1.copy();
-		System.out.println(f.toString());
 	}
 
 
-	@Test
-	public void testMultiply() {
+	public static void testMultiply() {
 		System.out.println();
 		System.out.println("testMultiply: ");
 	
@@ -31,8 +39,7 @@ public class MonomTestJunit {
 		System.out.println(m+" * "+m1+" = "+m2);
 	}
 	
-	@Test
-	public void testSubstract() {
+	public static void testSubstract() {
 		System.out.println();
 		System.out.println("testSubstract: ");
 		
@@ -44,8 +51,7 @@ public class MonomTestJunit {
 		System.out.println();
 	}
 	
-	@Test
-	public void testIsZero() {
+	public static void testIsZero() {
 		System.out.println();
 		System.out.println("testIsZero: ");
 		
@@ -63,8 +69,7 @@ public class MonomTestJunit {
 		System.out.println("m4 is Zero ?: "+m4.isZero());
 	}
 	
-	@Test
-	public void testDerivative() {
+	public static void testDerivative() {
 		System.out.println();
 		System.out.println("testDerivative: ");
 
@@ -74,8 +79,8 @@ public class MonomTestJunit {
 		System.out.println("After derivative: "+m3);
 	}
 
-	@Test
-	public void testFx() {
+
+	public static void testFx() {
 		System.out.println();
 		System.out.println("testFx: ");
 
@@ -90,8 +95,7 @@ public class MonomTestJunit {
 		System.out.println(m2 + " = "  + m2.f(x));
 	}
 
-	@Test
-	public void testEquals() {
+	public static void testEquals() {
 		System.out.println();
 		System.out.println("testEquals: ");
 		
@@ -104,8 +108,8 @@ public class MonomTestJunit {
 		System.out.println(m3+" equal to "+m4+" = " +m3.equals(m4));
 	}
 
-	@Test
-	public void testMonomString(){
+
+	public static void testMonomString(){
 		System.out.println();
 		System.out.println("testMonomString: ");
 		
@@ -135,9 +139,8 @@ public class MonomTestJunit {
 		System.out.println("Monom m = String s5 = " + m5);
 		System.out.println();	
 	}
-		
-	@Test
-	public void testError() {
+	
+	public static void testError() {
 	
 	System.out.println("**********************************");
 	System.out.println("Monom Error Test: ");
@@ -195,5 +198,6 @@ public class MonomTestJunit {
 	}
 }
 
+		
 
 }
