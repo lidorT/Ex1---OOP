@@ -1,21 +1,38 @@
-package myMath;
+package Ex1;
 
 public class PolynomTest {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		testFx();
-		testAdd();
-		testSubtract();
-		testMultiply();
-		testEquals();
-		testZero();
-		testCopy();
-		testDerivative();
-		testRoot();
-		testArea();
-		testPolynomString();
-		testError();
+		ComplexFunction cf = new ComplexFunction();
+
+		cf.initFromString("plus(plus(+1.0x+1.0,mul(mul(+1.0x+3.0,+1.0x-2.0),+1.0x+4.0)),2.0)");
+
+		//System.out.println(cf.toString());
+
+
+
+		//System.out.println("Close index check: "+ComplexFunction.Close_Index(str));
+
+		//System.out.println("Close index check: "+ComplexFunction.Open_Index(ComplexFunction.Close_Index(str),str));
+
+		//System.out.println("Close index check: "+ComplexFunction.Column_Index(ComplexFunction.Close_Index(str),str));
+
+
+
+
+		//		testFx();
+		//		testAdd();
+		//		testSubtract();
+		//		testMultiply();
+		//		testEquals();
+		//		testZero();
+		//		testCopy();
+		//		testDerivative();
+		//		testRoot();
+		//		testArea();
+		//		testPolynomString();
+		//		testError();
 	}
 
 	public static void testFx(){
@@ -255,42 +272,40 @@ public class PolynomTest {
 	}
 
 	public static void testError(){
-			System.out.println("testError: ");
-			Polynom p=new Polynom("-2x^4-3x^3+8+5x^7");
-		
-			try{
-				System.out.println(p.root(-1, 2, Monom.EPSILON));
-			}
-			catch(Exception e){
-				System.out.println("The Polynom: "+p+" has no root\n");
-			}
-			
-			try{
+		System.out.println("testError: ");
+		Polynom p=new Polynom("-2x^4-3x^3+8+5x^7");
+
+		try{
+			System.out.println(p.root(-1, 2, Monom.EPSILON));
+		}
+		catch(Exception e){
+			System.out.println("The Polynom: "+p+" has no root\n");
+		}
+
+		try{
 			System.out.println("try to calculate the area of: "+p+ " \nwith the next values: x0=-5,x1=-11, eps=0.0001");
 			double area2 = p.area(-5, -11,0.0001);
 			System.out.println( "the result is: "+area2+"\n");
 			System.out.println("try to calculate the area of: "+p+ " \nwith the next values: x0=-30,x1=-10, eps=0.0001");
 			double area = p.area(-30,-10,0.0001);
 			System.out.println( "the result is: "+area+"\n");
+		}
+		catch(Exception e){
+			System.out.println("The Polynom: "+p+"  has no area with the inputs x0=-30,x1=-10");
+		}
+
+
+		System.out.println();
+		String s[] = {"4x^^2+7x","12xx+6","--4x^3+5z","4z^2+5z"};
+		for(int i = 0; i < s.length ; i++) {
+			try { 
+				Polynom a = new Polynom(s[i]);
 			}
 			catch(Exception e){
-				System.out.println("The Polynom: "+p+"  has no area with the inputs x0=-30,x1=-10");
+				System.out.println(i+") "+s[i]+"     Invalid Polynom");
 			}
-			
-			
-			System.out.println();
-			String s[] = {"4x^^2+7x","12xx+6","--4x^3+5z","4z^2+5z"};
-			for(int i = 0; i < s.length ; i++) {
-				try { 
-					Polynom a = new Polynom(s[i]);
-				}
-				catch(Exception e){
-					System.out.println(i+") "+s[i]+"     Invalid Polynom");
-				}
-			}
-			
+		}
+
 	}
-		
+
 }
-
-

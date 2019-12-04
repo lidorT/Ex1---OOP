@@ -1,8 +1,9 @@
-package myMath;
+package Ex1;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import myMath.Monom;
+
+import Ex1.Monom;
 
 /**
  * This class represents a Polynom with add, multiply functionality, it also
