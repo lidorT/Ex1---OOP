@@ -1,4 +1,4 @@
-package Ex1;
+package myMath;
 
 public class PolynomTest {
 	public static void main(String[] args) {

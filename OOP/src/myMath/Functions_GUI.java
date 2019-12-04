@@ -1,4 +1,4 @@
-package Ex1;
+package myMath;
 
 public class Functions_GUI {
 

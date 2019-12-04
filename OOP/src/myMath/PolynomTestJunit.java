@@ -1,4 +1,4 @@
-package Ex1;
+package myMath;
 
 import org.junit.Test;
 
