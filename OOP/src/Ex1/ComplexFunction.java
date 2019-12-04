@@ -3,7 +3,7 @@ import java.util.*;
 
 public class ComplexFunction implements complex_function{
 
-// hhh
+// hh
 
 	//	/* A binary tree class in order to represents the complex function.
 	//	 * 
