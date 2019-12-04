@@ -1,6 +1,8 @@
 package myMath;	
 import java.util.*;
 
+import org.omg.SendingContext.RunTime;
+
 public class ComplexFunction implements complex_function{
 
 
@@ -263,6 +265,22 @@ public class ComplexFunction implements complex_function{
 
 		s=s.toLowerCase();
 		s=clear_spaces(s);
+		
+	
+	if (CheckString(s)==false ) {
+		
+		try{
+			Polynom p = new Polynom(s);
+		}
+		catch  (Exception e){
+			throw new RuntimeException ("You have entered an invaild string input, please fix and try again.");
+		}
+		
+		Polynom p = new Polynom(s);
+		ComplexFunction cf = new ComplexFunction(p,Operation.None);
+		return cf;
+	}
+		
 		String temp = s;
 		ComplexFunction ans = new ComplexFunction();
 
@@ -313,9 +331,33 @@ public class ComplexFunction implements complex_function{
 
 				Node n = new Node();
 				n.f = cf;
+				
+				if(pointer.op == Operation.Divid){
+					
+					ComplexFunction tempans = new ComplexFunction();
+					n.op = Operation.None;
+					tempans.function_list.add(n);
+					
+					Node tempNode = new Node();
+					tempNode.f = ans;
+					tempNode.op = Operation.None;
+					
+					ans.function_list.clear();
+					Node tempNode2 = new Node();
+					tempNode2.f = tempans;
+					tempNode2.op = Operation.Divid;
+					
+					ans.function_list.add(tempNode2);
+					ans.function_list.add(tempNode);
+					
+					pointer = tempNode;
+					
+				}
+				
+				else{
 				n.op = Operation.None;
 				pointer = n;
-
+				}
 				ans.function_list.add(n);
 
 			}
@@ -541,5 +583,79 @@ public class ComplexFunction implements complex_function{
 		return cf;
 	}
 
+	public static boolean CheckString (String s){
 
+		boolean flag = true;
+
+		if (CheckColumn(s)!=true) flag = false;
+		if (CheckOperators(s)!=true) flag = false;
+		return flag;
+	}
+
+	public static boolean CheckColumn (String s){
+
+		boolean flag = true;
+		int open_counter=0,close_counter=0,column_counter=0;
+		for (int i = 0; i < s.length(); i++) {
+			if (s.charAt(i)=='(') open_counter++;
+			if (s.charAt(i)==')') close_counter++;
+			if (s.charAt(i)==',') column_counter++;
+		}
+		if (open_counter!=close_counter || open_counter!=column_counter || close_counter != column_counter) flag =false;
+		if (open_counter==0 && column_counter==0 && close_counter==0) flag =false;
+		
+		return flag;
+	}
+
+
+	public static boolean CheckOperators (String s){
+
+		int index=0;
+		Operation Op = Operation.None;
+		boolean flag= true;
+		for (int i=0; i<s.length();i++){
+			if (s.charAt(i)=='(') {
+				index =i;
+				Op = get_op(index, s);
+				if (Op == Operation.None){
+					flag =false;
+					return flag;
+				}
+			}
+		}
+		return flag;
+	}
+	
+	
+	
+	
+	
+	public String toString() {
+		
+		String ans = "";
+		
+		Iterator<Node> IterComplex = this.function_list.listIterator();
+		
+		while (IterComplex.hasNext()){
+
+			Node temp = (Node) IterComplex;
+			ComplexFunction maybe  = (ComplexFunction) temp.f;
+			Iterator<Node> Iter = maybe.function_list.iterator();
+			while (Iter.hasNext()){
+				Iter.toString();
+				Iter.next();
+			}
+			IterComplex.next();
+			
+		}
+		
+		return ans;
+	}
+	
+	
+	
+	
+	
+	
+	
 }
