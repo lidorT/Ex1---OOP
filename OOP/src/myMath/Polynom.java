@@ -2,6 +2,7 @@ package myMath;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import myMath.Monom;
 
 /**
