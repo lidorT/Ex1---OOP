@@ -1,8 +1,6 @@
 package myMath;	
 import java.util.*;
 
-import org.omg.SendingContext.RunTime;
-
 public class ComplexFunction implements complex_function{
 
 
@@ -13,8 +11,8 @@ public class ComplexFunction implements complex_function{
 	//	class BinaryTree {
 	//	    BinaryTree left;
 	//	    BinaryTree right;
-	//	  
 	//	}
+
 	/*This class represents a Node that will hold each leave on the binary tree
 	 * Operation op created in order to hold the ENUM arithmetic symbol.
 	 *Function created in order to hold the function itself.
@@ -24,10 +22,6 @@ public class ComplexFunction implements complex_function{
 	 *										  /	   \
 	 *					      (left)x^3+2x  	 	    (right) - x^5+x^2
 	 */
-	class Node {
-		Operation op=Operation.None;
-		function f;
-	}
 
 	/*
 	 * An array list to represent the complex function.
@@ -37,43 +31,108 @@ public class ComplexFunction implements complex_function{
 	 * after that we store the nodes in the complex function array list.
 	 */
 	private ArrayList<Node> function_list = new ArrayList<>(); 
-	public String function_by_string;
+	private function left,right;
+	private Operation op;
+	private static final long serialVersionUID = 1L;
+
+
+	class Node {
+
+		private Operation op;
+		private function f;
+
+		public Node() {
+			f= new Polynom();
+			op = null;
+		}
+
+		public Node(String operator ,function f) {
+			this.f = f;
+			get_operator(operator);
+		}
+
+		public Node(Operation op ,function f) {
+			this.f = f;
+			this.op = op;
+		}
+
+		public function getf() {
+			return  f;
+		}
+
+		public void setP(function f) {
+			this.f = f;
+		}
+
+		public Operation getop() {
+			return op;
+		}
+
+		public void setop(Operation op) {
+			this.op = op;
+		}
+
+		public Node copy() {
+			String te = this.op.toString();
+			Node temp = new Node(te,f.copy());
+			return temp;
+		}
+	}
+
+
+
+
+
 
 
 	/*
 	 * deffult constractor.
 	 */
 	public ComplexFunction(){
-		//		
-		//		Node n= new Node();
-		//		this.function_list.add(n);
 
+		this.right = new Polynom();
+		this.left= new Polynom();
+		this.function_list = new ArrayList<Node>();
+	}
+
+	public ComplexFunction(function f) {
+
+		this.right = null;
+		this.left =  f;
+		this.function_list = new ArrayList<Node>();
+		this.op = Operation.None;
 	}
 
 
 	public ComplexFunction(function f1,Operation op, function f2){
 
-		Node n1 = new Node();
-		n1.f=f1;
-		n1.op=op;
-		Node n2= new Node();
-		n2.f=f2;
-		n2.op=Operation.None;
+		this.left =  f1;
+		this.right = f2;
+		this.op = op;
+		this.function_list = new ArrayList<Node>();
+		Node temp = new Node(op,f2);
+		function_list.add(temp);
+	}
 
-		this.function_list.add(n1);
-		this.function_list.add(n2);
 
+	public ComplexFunction(String operator, function f1, function f2) {
+
+		this.left =  f1;
+		this.right = f2;
+		this.function_list = new ArrayList<Node>();
+		Node temp = new Node(op,f2);
+		function_list.add(temp);
+		this.get_operator(operator);
 	}
 
 
 
-	public ComplexFunction(function f1,Operation op){
+	public ComplexFunction(function f,Operation op){
 
-		Node n1 = new Node();
-		n1.f=f1;
-		n1.op=op;
-
-		this.function_list.add(n1);
+		this.right = null;
+		this.left =  f;
+		this.function_list = new ArrayList<Node>();
+		this.op = Operation.None;
 	}
 
 
@@ -83,15 +142,8 @@ public class ComplexFunction implements complex_function{
 	 */
 	public void plus(function f1) {
 
-		Node n = new Node();
-		Node Pointer = new Node();
-		n.f = f1;
-		Iterator<Node> functionIter = iteretor();
-		while (this.function_list.iterator().hasNext()){
-			Pointer=functionIter .next();
-		}
-		Pointer.op=Operation.Plus;
-		this.function_list.add(n);
+		Node temp = new Node("plus",f1);
+		function_list.add(temp);
 	}
 
 
@@ -101,18 +153,8 @@ public class ComplexFunction implements complex_function{
 	 */
 	public void mul(function f1) {
 
-		Node n = new Node();
-		Node Pointer = new Node();
-		n.f = f1;
-		Iterator<Node> functionIter = iteretor();
-		while (this.function_list.iterator().hasNext()){
-			Pointer=functionIter .next();
-		}
-		Pointer.op=Operation.Times;
-		this.function_list.add(n);
-
-
-
+		Node temp = new Node("mul" ,f1);
+		function_list.add(temp);
 	}
 
 
@@ -122,16 +164,8 @@ public class ComplexFunction implements complex_function{
 	 */
 	public void div(function f1) {
 
-		Node n = new Node();
-		Node Pointer = new Node();
-		n.f = f1;
-		Iterator<Node> functionIter = iteretor();
-		while (this.function_list.iterator().hasNext()){
-			Pointer=functionIter .next();
-		}
-		Pointer.op=Operation.Divid;
-		this.function_list.add(n);
-
+		Node temp = new Node("div" ,f1);
+		function_list.add(temp);
 	}
 
 
@@ -141,9 +175,8 @@ public class ComplexFunction implements complex_function{
 	 */
 	public void max(function f1) {
 
-
-
-
+		Node temp = new Node("max" ,f1);
+		function_list.add(temp);
 	}
 
 
@@ -152,6 +185,9 @@ public class ComplexFunction implements complex_function{
 	 * @param f1 the complex_function which will be compared with this complex_function - to compute the minimum.
 	 */
 	public void min(function f1) {
+
+		Node temp = new Node("min" ,f1);
+		function_list.add(temp);
 	}
 
 
@@ -160,6 +196,9 @@ public class ComplexFunction implements complex_function{
 	 * @param f1 complex function
 	 */
 	public void comp(function f1) {
+
+		Node temp = new Node("comp" ,f1);
+		function_list.add(temp);
 	}	
 
 
@@ -167,21 +206,8 @@ public class ComplexFunction implements complex_function{
 	 * @return a function representing the left side of this complex funcation
 	 */
 	public function left() {
-
-		Node Pointer = new Node();
-		Pointer.f=this.function_list.get(0).f;
-		Pointer.op=this.function_list.get(0).op;
-		Iterator<Node> functionIter = iteretor();
-		ComplexFunction cf = new ComplexFunction();
-
-		while (iteretor().next().op != Operation.None){
-			Node temp = new Node();
-			temp.f = Pointer.f;
-			temp.op = Pointer.op;
-			cf.function_list.add(temp);
-			Pointer = functionIter.next();
-		}
-		return cf;
+		
+		return this.left;
 	}
 
 
@@ -189,21 +215,8 @@ public class ComplexFunction implements complex_function{
 	 * @return a function representing the left side of this complex funcation
 	 */
 	public function right() {
-		Node Pointer = new Node();
-		Iterator<Node> functionIter = iteretor();
-		while (iteretor().hasNext()){
-			Pointer=functionIter.next();
-		}
-
-		ComplexFunction cf = new ComplexFunction();
-
-		Node temp = new Node();
-		temp.f=Pointer.f;
-		temp.op=Pointer.op;
-
-		cf.function_list.add(temp);
-
-		return cf;
+	
+		return this.right;
 	}
 
 
@@ -212,75 +225,61 @@ public class ComplexFunction implements complex_function{
 	 * @return
 	 */
 	public Operation getOp() {
-		Node Pointer = new Node();
 
-		Iterator<Node> functionIter = iteretor();
-
-
-		while (iteretor().next().op != Operation.None){
-
-			Pointer=functionIter.next();
-
-
-		}
-
-		return Pointer.op;
-
+		return this.op;
 	}
 
 
 
 	public function copy() {
-		Node Pointer = new Node();
-		Pointer.f=this.function_list.get(0).f;
-		Pointer.op=this.function_list.get(0).op;
+
 		ComplexFunction cf = new ComplexFunction();
-		Iterator<Node> functionIter = iteretor();
 
-
-		while (iteretor().hasNext()){
-			Node temp = new Node();
-			temp.f=Pointer.f;
-			temp.op=Pointer.op;
-			cf.function_list.add(temp);
-			Pointer=functionIter.next();
-
-
+		cf.setLeft(this.left.copy());
+		if(this.right!=null) {
+			cf.setRight(this.right.copy());
+		}else {
+			cf.setRight(null);
 		}
+		cf.setOp(this.op);
 
+
+		ArrayList<Node> tempList = new ArrayList<Node>();
+		Iterator<Node> iter = iteretor();
+		while(iter.hasNext()) {
+			tempList.add(iter.next());
+		}
+		cf.setList(tempList);
 		return cf;
 	}
+	//function m = new ComplexFunction(this.op.toString(), this.left,this.right);
+	//return m;
 
-	@Override
+
 	public double f(double x) {
-		// TODO Auto-generated method stub
-		return 0;
+		return 0.0;
 	}
-
-
-
 
 
 	public function initFromString(String s) {
 
 		s=s.toLowerCase();
 		s=clear_spaces(s);
-		
-	
-	if (CheckString(s)==false ) {
-		
-		try{
+
+		if (CheckString(s)==false ) {
+
+			try{
+				Polynom p = new Polynom(s);
+			}
+			catch  (Exception e){
+				throw new RuntimeException ("You have entered an invaild string input, please fix and try again.");
+			}
+
 			Polynom p = new Polynom(s);
+			ComplexFunction cf = new ComplexFunction(p);
+			return cf;
 		}
-		catch  (Exception e){
-			throw new RuntimeException ("You have entered an invaild string input, please fix and try again.");
-		}
-		
-		Polynom p = new Polynom(s);
-		ComplexFunction cf = new ComplexFunction(p,Operation.None);
-		return cf;
-	}
-		
+
 		String temp = s;
 		ComplexFunction ans = new ComplexFunction();
 
@@ -298,125 +297,89 @@ public class ComplexFunction implements complex_function{
 
 			if(Case == 1){
 
-				cf = initHelper(start,column,end,temp);
-				Node n = new Node();
-				n.f = cf;
-				n.op = Operation.None;
+				Operation tempOp = get_op(start,s);
 
-				ans.function_list.add(n);
-				pointer = n;
+				String s1 = temp.substring(start+1,column);
+				String s2 = temp.substring(column+1,end);
+				Polynom p1 = new Polynom(s1);
+				Polynom p2 = new Polynom(s2);
 
+				cf = new ComplexFunction(p1,tempOp,p2);
+				//ans.left = cf;
+				//ans.right = null;
+				Node lastNode = new Node(Operation.None,cf);
+				if(ans.function_list.size()>0){
+					pointer = ans.function_list.get(ans.function_list.size() - 1);
+				}
+				else{
+					pointer.setop(tempOp);
+				}
+				ans.function_list.add(lastNode);
+
+
+				if(ans.op == Operation.None){
+					int openIndex = Open_Index(start,temp);
+					pointer.op = get_op(openIndex, temp);
+				}
+
+				if(pointer.op == Operation.Divid){
+
+					pointer.op = Operation.None;
+					ComplexFunction templeft = new ComplexFunction();
+					ComplexFunction tempright = new ComplexFunction();
+					templeft = (ComplexFunction) ans.left.copy();
+					tempright = (ComplexFunction) ans.right.copy();
+					tempright.op = Operation.Divid;
+					ans.function_list.clear();
+					ans.left = tempright.copy();
+					ans.right =  templeft.copy();	
+				}
+				
 			}
 
 			if(Case == 2){
 
-				pointer.op =  get_op(start, temp);
-				String s3 = temp.substring(column+1,end);
-				cf = StringToComplex(s3,Operation.None);
-
-				Node n = new Node();
-				n.f = cf;
-				n.op = Operation.None;
-				pointer = n;
-
-				ans.function_list.add(n);
-
+				Operation tempOp = get_op(start,s);
+				String s1 = temp.substring(column+1,end);
+				Polynom p = new Polynom(s1);
+				cf = new ComplexFunction(p);
+				Node lastNode = new Node(Operation.None,cf);
+				pointer = ans.function_list.get(ans.function_list.size()-1);
+				pointer.setop(tempOp);		
+				ans.function_list.add(lastNode);
 			}
+
 
 			if(Case == 3){
 
-				pointer.op =  get_op(start, temp);
-				String s3 = temp.substring(start+1,column);
-				cf = StringToComplex(s3,Operation.None);
-
-				Node n = new Node();
-				n.f = cf;
-				
-				if(pointer.op == Operation.Divid){
-					
-					ComplexFunction tempans = new ComplexFunction();
-					n.op = Operation.None;
-					tempans.function_list.add(n);
-					
-					Node tempNode = new Node();
-					tempNode.f = ans;
-					tempNode.op = Operation.None;
-					
-					ans.function_list.clear();
-					Node tempNode2 = new Node();
-					tempNode2.f = tempans;
-					tempNode2.op = Operation.Divid;
-					
-					ans.function_list.add(tempNode2);
-					ans.function_list.add(tempNode);
-					
-					pointer = tempNode;
-					
-				}
-				
-				else{
-				n.op = Operation.None;
-				pointer = n;
-				}
-				ans.function_list.add(n);
-
+				Operation tempOp = get_op(start,s);
+				String s1 = temp.substring(start+1,column);
+				Polynom p = new Polynom(s1);
+				cf = new ComplexFunction(p);
+				Node lastNode = new Node(Operation.None,cf);
+				pointer = ans.function_list.get(ans.function_list.size()-1);
+				pointer.setop(tempOp);
+				ans.function_list.add(lastNode);
 			}
 
 			int length = get_op_length(start,temp);
 			temp = temp.substring(0, start-length) + temp.substring(end+1);
-
 		}
-
+	
 		return ans;
 	}
 
 
 
 
-	private ComplexFunction initHelper (int start,int column,int end,String s){
-
-		Operation op = get_op(start,s); 
-
-		String s1=s.substring(start+1,column);
-		String s2=s.substring(column+1,end);
-
-		ComplexFunction cf = new ComplexFunction();
-		cf = StringToComplex(s1, op, s2);
-
-		return cf;
-	}
-
-
-
-
-
-
-
-
-	//// Private Methods:
-
-
-	private static int[] flip_arr_values (int[] arr) {
-
-		int[] temp = new int[arr.length];
-		int j=0;
-		for (int i=arr.length-1;i>-1;i--) {
-
-
-			temp[j]=arr[i];
-			j++;
-
-
-		}
-
-		return temp;
-
-	}
-
+	////////// Private Methods: //////////////
 
 	private Iterator<ComplexFunction.Node> iteretor() {
 		return this.function_list.iterator();
 	}
+
+
+
 
 	/*
 	 * This function gets a string and returns it without spaces 
@@ -425,42 +388,19 @@ public class ComplexFunction implements complex_function{
 	 * output: "3x^2+6x^3"
 	 */
 	private String clear_spaces (String s) {
-
 		s=s.replaceAll(" ","");
-
 		return s;
-
-
 	}
 
-
-
-
-	private void Clean(String s){
-
-
-
-		if (s.charAt(0)=='(' && s.charAt(s.length())==')'){
-
-			s=s.substring(1,s.length()-1);
-
-		}
-
-
-	}
 
 	/*
 	 * this function returns index of the first ')'
 	 */
 
 	public static int Close_Index (String s){
-
-
-
-
 		return s.indexOf(')');
-
 	}
+
 
 	/*
 	 * this function returns index of the last '('
@@ -476,11 +416,12 @@ public class ComplexFunction implements complex_function{
 				break;
 
 			}
-
 		}
 		return Open_Index;
-
 	}
+	
+	
+	
 	/*
 	 * this function returns index of the first ','
 	 */
@@ -494,26 +435,48 @@ public class ComplexFunction implements complex_function{
 				break;
 			}
 		}
+		
 		return Column_Index;
-
 	}
+	
+	
 	/*
 	 * This function returns the operation of a given string.
 	 */
+	public void get_operator(String str){
+
+		switch(str) {
+		case "plus": op = Operation.Plus;
+		break;
+		case "mul": op = Operation.Times;
+		break;
+		case  "div": op = Operation.Divid;
+		break;
+		case "min" :op = Operation.Min;
+		break;
+		case "max":op = Operation.Max;
+		break;
+		case "comp":op = Operation.Comp;
+		break;
+		case "none":op = Operation.None;
+		break;
+		default: op = Operation.Error;
+		}
+	}
+
+
 
 	public static Operation get_op(int Index, String str){
 
 		String temp=str.substring(Index-3,Index);
 
 		Operation OpTemp = Operation.None;
-
 		if (temp.equals("mul")) OpTemp = Operation.Times;
 		if (temp.equals("div")) OpTemp = Operation.Divid;
 		if (temp.equals("min")) OpTemp = Operation.Min;
 		if (temp.equals("max")) OpTemp = Operation.Max;
 
 		temp=str.substring(Index-4,Index);
-
 		if (temp.equals("plus")) OpTemp = Operation.Plus;
 		if (temp.equals("comp")) OpTemp = Operation.Comp;
 
@@ -521,19 +484,6 @@ public class ComplexFunction implements complex_function{
 	}
 
 
-	public static int get_op_length(int Index, String str){
-
-		int ans=0;
-		String temp=str.substring(Index-3,Index);
-
-		if (temp.equals("mul") || temp.equals("div") || temp.equals("min") || temp.equals("max") ) ans = 3;
-
-		temp=str.substring(Index-4,Index);
-
-		if (temp.equals("plus") || temp.equals("comp")) ans = 4;
-
-		return ans;
-	}
 
 	/**
 	 * This function return an Integer that represent us one of the following cases :
@@ -552,6 +502,9 @@ public class ComplexFunction implements complex_function{
 		String temp = str;
 		int Case = 1;
 
+		System.out.println(str);
+		System.out.println();
+
 		String s1 = str.substring(start+1, column);
 		String s2 = temp.substring(column+1, end);
 
@@ -567,26 +520,21 @@ public class ComplexFunction implements complex_function{
 
 		Polynom p1 = new Polynom(s1);
 		Polynom p2 = new Polynom(s2);
-
 		ComplexFunction cf = new ComplexFunction(p1,op,p2);
-
-
 		return cf;
-
 	}
 
 
 	public static ComplexFunction StringToComplex (String s1,Operation op){
+		
 		Polynom p1 = new Polynom(s1);
 		ComplexFunction cf = new ComplexFunction(p1,op);
-
 		return cf;
 	}
 
 	public static boolean CheckString (String s){
 
 		boolean flag = true;
-
 		if (CheckColumn(s)!=true) flag = false;
 		if (CheckOperators(s)!=true) flag = false;
 		return flag;
@@ -603,7 +551,7 @@ public class ComplexFunction implements complex_function{
 		}
 		if (open_counter!=close_counter || open_counter!=column_counter || close_counter != column_counter) flag =false;
 		if (open_counter==0 && column_counter==0 && close_counter==0) flag =false;
-		
+
 		return flag;
 	}
 
@@ -625,37 +573,50 @@ public class ComplexFunction implements complex_function{
 		}
 		return flag;
 	}
-	
-	
-	
-	
-	
-	public String toString() {
-		
-		String ans = "";
-		
-		Iterator<Node> IterComplex = this.function_list.listIterator();
-		
-		while (IterComplex.hasNext()){
 
-			Node temp = (Node) IterComplex;
-			ComplexFunction maybe  = (ComplexFunction) temp.f;
-			Iterator<Node> Iter = maybe.function_list.iterator();
-			while (Iter.hasNext()){
-				Iter.toString();
-				Iter.next();
-			}
-			IterComplex.next();
-			
-		}
-		
-		return ans;
+
+
+	public String toString() {
+		return this.left().toString();
+	}
+
+
+	public void setLeft(function left) {
+		this.left = left;
 	}
 	
+	public void setRight(function right) {
+		this.right = right;
+	}
 	
+	public void setOp(Operation op) {
+		this.op = op;
+	}
 	
+	public ArrayList<Node> getList() {
+		return (ArrayList<Node>) function_list;
+	}
 	
-	
-	
-	
+	public void setList(ArrayList<Node> function_list) {
+		this.function_list = function_list;
+	}
+
+
+	public static int get_op_length(int Index, String str){
+
+		int ans=0;
+		
+		String temp=str.substring(Index-3,Index);
+		if (temp.equals("mul") || temp.equals("div") || temp.equals("min") || temp.equals("max") ) ans = 3;
+
+		temp=str.substring(Index-4,Index);
+		if (temp.equals("plus") || temp.equals("comp")) ans = 4;
+
+		return ans;
+	}
+
+
+
+
+
 }
