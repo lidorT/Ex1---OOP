@@ -26,8 +26,12 @@ public class Polynom implements Polynom_able {
 	/**
 	 * Deafult constractor that builds Zero polynom.
 	 */
+	
+
+	
 	public Polynom() {
 		this.Monoms_List.add(new Monom(0, 0));
+		
 	}
 
 	

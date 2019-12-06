@@ -34,7 +34,9 @@ public class ComplexFunction implements complex_function{
 	private function left,right;
 	private Operation op;
 	private static final long serialVersionUID = 1L;
-	private Queue<Integer>DivQueue = new ArrayDeque<Integer>();
+	public Queue<Polynom>PolyQ = new ArrayDeque<Polynom>();
+	public Queue<Operation>OpQ = new ArrayDeque<Operation>();
+	public Queue<Integer>DivQ = new ArrayDeque<Integer>();
 
 	class Node {
 
@@ -42,7 +44,7 @@ public class ComplexFunction implements complex_function{
 		private function f;
 
 		public Node() {
-			f= new Polynom();
+			f= new ComplexFunction();
 			op = null;
 		}
 
@@ -256,10 +258,79 @@ public class ComplexFunction implements complex_function{
 	//return m;
 
 
+//	public double f(double x) {
+//		
+//		return 0.0;
+//		
+//	}
+	
+	
 	public double f(double x) {
-		return 0.0;
+		
+		
+		
+		Node temp = new Node();
+		
+		
+	
+		Iterator<Node> iter = iteretor();
+		
+		temp=this.function_list.get(0);
+		double sum=0.0;
+		
+		
+		
+		
+		if(temp.f !=null) {
+			//sum = temp;
+		}
+		
+		
+		while(iter.hasNext()) {
+			temp=iter.next();
+		
+			
+		
+			
+			
+			
+			
+			switch(temp.op) {
+			case Plus: op = Operation.Plus;
+			break;
+			case Times: op = Operation.Times;
+			break;
+			//case  "div": op = Operation.Divid;
+			//break;
+			case Min :op = Operation.Min;
+			break;
+			case Max:op = Operation.Max;
+			break;
+			case Comp:op = Operation.Comp;
+			break;
+			case None:op = Operation.None;
+			break;
+			default: op = Operation.Error;
+			}
+			
+			
+			
+			
+			
+			
+			iter.next();
+			
+		}
+		
+	
+		return sum;
 	}
 
+	
+	
+	
+	
+	
 
 	public function initFromString(String s) {
 
@@ -309,6 +380,11 @@ public class ComplexFunction implements complex_function{
 				Polynom p1 = new Polynom(s1);
 				Polynom p2 = new Polynom(s2);
 
+				PolyQ.add(p1);
+				PolyQ.add(p2);
+				OpQ.add(tempOp);
+				
+				
 				cf = new ComplexFunction(p1,tempOp,p2);
 				
 				Node lastNode = new Node(Operation.None,cf);
@@ -355,6 +431,8 @@ public class ComplexFunction implements complex_function{
 				ans.setOp(tempOp);
 				String s1 = temp.substring(column+1,end);
 				Polynom p = new Polynom(s1);
+				PolyQ.add(p);
+				OpQ.add(tempOp);
 				cf = new ComplexFunction(p);
 				Node lastNode = new Node(Operation.None,cf);
 				pointer = ans.function_list.get(ans.function_list.size()-1);
@@ -374,6 +452,8 @@ public class ComplexFunction implements complex_function{
 				ans.setOp(tempOp);
 				String s1 = temp.substring(start+1,column);
 				Polynom p = new Polynom(s1);
+				PolyQ.add(p);
+				OpQ.add(tempOp);
 				cf = new ComplexFunction(p);
 				Node lastNode = new Node(Operation.None,cf);
 				pointer = ans.function_list.get(ans.function_list.size()-1);
@@ -384,8 +464,8 @@ public class ComplexFunction implements complex_function{
 				Right.function_list.add(lastNode);
 				ans.right=Right;
 				if (tempOp == Operation.Divid) {
-					ans.DivQueue.add(ans.function_list.size()-1);
-					System.out.println("Entered to Queue:" +ans.DivQueue.peek());
+					ans.DivQ.add(ans.function_list.size()-1);
+					System.out.println("Entered to Queue:" +ans.DivQ.peek());
 				}
 			}
 			int length = get_op_length(start,temp);
