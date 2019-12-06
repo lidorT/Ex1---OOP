@@ -34,7 +34,7 @@ public class ComplexFunction implements complex_function{
 	private function left,right;
 	private Operation op;
 	private static final long serialVersionUID = 1L;
-
+	private Queue<Integer>DivQueue = new ArrayDeque<Integer>();
 
 	class Node {
 
@@ -265,6 +265,7 @@ public class ComplexFunction implements complex_function{
 
 		s=s.toLowerCase();
 		s=clear_spaces(s);
+		int counter=0;
 
 		if (CheckString(s)==false ) {
 
@@ -285,12 +286,16 @@ public class ComplexFunction implements complex_function{
 
 		Node pointer = new Node();
 
+	
+		
+		
 		while(temp.length() != 0) {
 
 			int end = Close_Index(temp);
 			int start = Open_Index(end,temp);
 			int column = Column_Index (end,temp);
-
+			
+			
 			int Case = Check_case(start,column,end,temp);
 			ComplexFunction cf = new ComplexFunction();
 
@@ -305,65 +310,87 @@ public class ComplexFunction implements complex_function{
 				Polynom p2 = new Polynom(s2);
 
 				cf = new ComplexFunction(p1,tempOp,p2);
-				//ans.left = cf;
-				//ans.right = null;
+				
 				Node lastNode = new Node(Operation.None,cf);
 				if(ans.function_list.size()>0){
+					ans.setOp(tempOp);
 					pointer = ans.function_list.get(ans.function_list.size() - 1);
 				}
 				else{
 					pointer.setop(tempOp);
 				}
+				
+			
+				
+				if (counter>0) {
+				ans.left=ans.copy();
 				ans.function_list.add(lastNode);
-
-
+			
+				ComplexFunction Right= new ComplexFunction();
+				Right.function_list.add(lastNode);
+				ans.right=Right;
+				}
+				
+				else {
+					
+					
+					ans.left=ans.copy();
+					ans.function_list.add(lastNode);
+					
+					
+					
+					
+				}
+				
+				
 				if(ans.op == Operation.None){
 					int openIndex = Open_Index(start,temp);
 					pointer.op = get_op(openIndex, temp);
 				}
-
-				if(pointer.op == Operation.Divid){
-
-					pointer.op = Operation.None;
-					ComplexFunction templeft = new ComplexFunction();
-					ComplexFunction tempright = new ComplexFunction();
-					templeft = (ComplexFunction) ans.left.copy();
-					tempright = (ComplexFunction) ans.right.copy();
-					tempright.op = Operation.Divid;
-					ans.function_list.clear();
-					ans.left = tempright.copy();
-					ans.right =  templeft.copy();	
-				}
-				
 			}
 
 			if(Case == 2){
 
 				Operation tempOp = get_op(start,s);
+				ans.setOp(tempOp);
 				String s1 = temp.substring(column+1,end);
 				Polynom p = new Polynom(s1);
 				cf = new ComplexFunction(p);
 				Node lastNode = new Node(Operation.None,cf);
 				pointer = ans.function_list.get(ans.function_list.size()-1);
-				pointer.setop(tempOp);		
+				pointer.setop(tempOp);	
+				ans.left=ans.copy();
 				ans.function_list.add(lastNode);
+				ComplexFunction Right= new ComplexFunction();
+				Right.function_list.add(lastNode);
+				ans.right=Right;
+		
 			}
 
 
 			if(Case == 3){
 
 				Operation tempOp = get_op(start,s);
+				ans.setOp(tempOp);
 				String s1 = temp.substring(start+1,column);
 				Polynom p = new Polynom(s1);
 				cf = new ComplexFunction(p);
 				Node lastNode = new Node(Operation.None,cf);
 				pointer = ans.function_list.get(ans.function_list.size()-1);
 				pointer.setop(tempOp);
+				ans.left=ans.copy();
 				ans.function_list.add(lastNode);
+				ComplexFunction Right= new ComplexFunction();
+				Right.function_list.add(lastNode);
+				ans.right=Right;
+				if (tempOp == Operation.Divid) {
+					ans.DivQueue.add(ans.function_list.size()-1);
+					System.out.println("Entered to Queue:" +ans.DivQueue.peek());
+				}
 			}
-
 			int length = get_op_length(start,temp);
 			temp = temp.substring(0, start-length) + temp.substring(end+1);
+			counter++;
 		}
 	
 		return ans;
@@ -470,17 +497,16 @@ public class ComplexFunction implements complex_function{
 
 		String temp=str.substring(Index-3,Index);
 
-		Operation OpTemp = Operation.None;
-		if (temp.equals("mul")) OpTemp = Operation.Times;
-		if (temp.equals("div")) OpTemp = Operation.Divid;
-		if (temp.equals("min")) OpTemp = Operation.Min;
-		if (temp.equals("max")) OpTemp = Operation.Max;
-
+		if (temp.equals("mul"))	return Operation.Times;
+		if (temp.equals("div")) return Operation.Divid;
+		if (temp.equals("min")) return Operation.Min;
+		if (temp.equals("max")) return Operation.Max;
+		
 		temp=str.substring(Index-4,Index);
-		if (temp.equals("plus")) OpTemp = Operation.Plus;
-		if (temp.equals("comp")) OpTemp = Operation.Comp;
+		if (temp.equals("plus")) return Operation.Plus;
+		if (temp.equals("comp")) return Operation.Comp;
 
-		return OpTemp;
+		return Operation.None;
 	}
 
 
@@ -594,7 +620,7 @@ public class ComplexFunction implements complex_function{
 	}
 	
 	public ArrayList<Node> getList() {
-		return (ArrayList<Node>) function_list;
+		return (ArrayList<Node>) this.function_list;
 	}
 	
 	public void setList(ArrayList<Node> function_list) {
@@ -607,7 +633,10 @@ public class ComplexFunction implements complex_function{
 		int ans=0;
 		
 		String temp=str.substring(Index-3,Index);
-		if (temp.equals("mul") || temp.equals("div") || temp.equals("min") || temp.equals("max") ) ans = 3;
+		if (temp.equals("mul") || temp.equals("div") || temp.equals("min") || temp.equals("max") ) {
+			 ans = 3;
+			 return ans;
+		}
 
 		temp=str.substring(Index-4,Index);
 		if (temp.equals("plus") || temp.equals("comp")) ans = 4;
@@ -617,6 +646,21 @@ public class ComplexFunction implements complex_function{
 
 
 
-
+	public ArrayList<Node> ArrayListCopy(ArrayList list){
+		
+		ArrayList<Node> copy =  new ArrayList();
+		
+		
+		
+		
+		return function_list;
+		
+		
+		
+		
+		
+	}
+	
+	
 
 }
