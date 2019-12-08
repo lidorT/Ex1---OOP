@@ -7,10 +7,21 @@ public class PolynomTest {
 
 		ComplexFunction cf = new ComplexFunction();
 		
-		cf.initFromString("plus(div(+1.0x +1.0,mul(mul(+1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)");
-
-		System.out.println(cf.PolyQ.toString());
-		System.out.println(cf.OpQ.toString());
+		cf.initFromString("plus(plus(+1.0x+1.0,mul(mul(+1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)");
+		System.out.println(cf.f(1));
+		
+		
+//		System.out.println("******************");
+//		System.out.println(cf.PolyQ.toString());
+//		System.out.println(cf.OpQ.toString());
+//
+//		ComplexFunction cf2 = new ComplexFunction();
+//		ComplexFunction cf3 = new ComplexFunction();
+//		cf2=cf.copyCF();
+//		cf.mul(cf2);
+		
+		
+	
 		
 		//System.out.println(cf.toString());
 

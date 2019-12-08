@@ -30,111 +30,247 @@ public class ComplexFunction implements complex_function{
 	 * second node will hold the right function (f2)
 	 * after that we store the nodes in the complex function array list.
 	 */
-	private ArrayList<Node> function_list = new ArrayList<>(); 
 	private function left,right;
 	private Operation op;
-	private static final long serialVersionUID = 1L;
-	public Queue<Polynom>PolyQ = new ArrayDeque<Polynom>();
-	public Queue<Operation>OpQ = new ArrayDeque<Operation>();
+	public ArrayList<Node> PolynomList = new ArrayList<>(); 
 	public Queue<Integer>DivQ = new ArrayDeque<Integer>();
+
+
+	private static final long serialVersionUID = 1L;
 
 	class Node {
 
-		private Operation op;
-		private function f;
+		private Operation G_op;
+		private Operation P_op;
+		private Polynom left;
+		private Polynom right;
 
 		public Node() {
-			f= new ComplexFunction();
-			op = null;
+			this.G_op=Operation.None;
+			this.P_op=Operation.None;
+			this.left = null;
+			this.right=null;
 		}
 
-		public Node(String operator ,function f) {
-			this.f = f;
-			get_operator(operator);
+
+		public Node(Polynom p1,Operation P_op , Polynom p2, Operation G_op) {
+			this.left = p1;
+			this.right =p2;
+			this.P_op = P_op;
+			this.G_op= G_op;
 		}
 
-		public Node(Operation op ,function f) {
-			this.f = f;
-			this.op = op;
-		}
 
-		public function getf() {
-			return  f;
+		public void setG_op(Operation op) {
+			this.G_op = op;
 		}
-
-		public void setP(function f) {
-			this.f = f;
+		public void setP_op(Operation op) {
+			this.P_op = op;
 		}
-
-		public Operation getop() {
-			return op;
-		}
-
-		public void setop(Operation op) {
-			this.op = op;
-		}
-
 		public Node copy() {
-			String te = this.op.toString();
-			Node temp = new Node(te,f.copy());
+			Node temp = new Node(this.left,this.P_op,this.right,this.G_op);
 			return temp;
+
 		}
 	}
-
-
-
-
-
-
 
 	/*
 	 * deffult constractor.
 	 */
 	public ComplexFunction(){
 
-		this.right = new Polynom();
-		this.left= new Polynom();
-		this.function_list = new ArrayList<Node>();
+		this.PolynomList = new ArrayList<Node>();
 	}
 
-	public ComplexFunction(function f) {
-
-		this.right = null;
-		this.left =  f;
-		this.function_list = new ArrayList<Node>();
-		this.op = Operation.None;
-	}
 
 
 	public ComplexFunction(function f1,Operation op, function f2){
 
-		this.left =  f1;
-		this.right = f2;
-		this.op = op;
-		this.function_list = new ArrayList<Node>();
-		Node temp = new Node(op,f2);
-		function_list.add(temp);
+		if (f1 instanceof Polynom && f2 instanceof Polynom) {
+			Node temp = new Node((Polynom)f1,op,(Polynom)f2,Operation.None);
+			this.PolynomList.add(temp);
+		}
+
+		if (f1 instanceof ComplexFunction && f2 instanceof ComplexFunction) {
+
+			ArrayList<Node> f1List = new ArrayList<Node>();
+			f1List=ArrayListCopy((ComplexFunction)f1);
+			ArrayList<Node> f2List = new ArrayList<Node>();
+			f2List=ArrayListCopy((ComplexFunction)f2);
+			int counter=f1List.size();
+			Node Pointer = new Node();
+			Iterator <Node> iter1 = f1List.iterator();
+
+			while (iter1.hasNext()) {
+				this.PolynomList.add(iter1.next());
+
+				if (counter ==1) {
+					Pointer=iter1.next();
+					Pointer.G_op=op;
+				}
+				iter1.next();
+				counter--;
+			}
+
+			Iterator <Node> iter2 = f2List.iterator();
+			while (iter2.hasNext()) {
+				this.PolynomList.add(iter2.next());
+				iter1.next();
+
+			}
+		}
+
+
+
+		if (f1 instanceof Polynom && f2 instanceof ComplexFunction ) {
+
+			Node temp = new Node((Polynom)f1,Operation.None,null,op);
+			this.PolynomList.add(temp);
+
+			ArrayList<Node> f2List = new ArrayList<Node>();
+			f2List=ArrayListCopy((ComplexFunction)f2);
+			Iterator <Node> iter2 = f2List.iterator();
+			while (iter2.hasNext()) {
+				this.PolynomList.add(iter2.next());
+				iter2.next();
+			}
+		}
+
+		if (f1 instanceof ComplexFunction && f2 instanceof Polynom ) {
+
+
+			ArrayList<Node> f1List = new ArrayList<Node>();
+			f1List=ArrayListCopy((ComplexFunction)f1);
+
+			int counter=f1List.size();
+			Iterator <Node> iter1 = f1List.iterator();
+			Node Pointer = new Node();
+
+			while (iter1.hasNext()) {
+				this.PolynomList.add(iter1.next());
+				if(counter==1) {
+					Pointer=iter1.next();
+					Pointer.G_op=op;
+				}
+				iter1.next();
+				counter--;
+			}
+			Node temp = new Node((Polynom)f2,Operation.None,null,Operation.None);
+			this.PolynomList.add(temp);
+		}
 	}
 
 
 	public ComplexFunction(String operator, function f1, function f2) {
 
-		this.left =  f1;
-		this.right = f2;
-		this.function_list = new ArrayList<Node>();
-		Node temp = new Node(op,f2);
-		function_list.add(temp);
-		this.get_operator(operator);
+		int z = operator.length();
+		Operation tempOp = get_op(z-1, operator);
+
+		if (f1 instanceof Polynom && f2 instanceof Polynom) {
+			Node temp = new Node((Polynom)f1,tempOp,(Polynom)f2,Operation.None);
+			this.PolynomList.add(temp);
+		}
+
+		if (f1 instanceof ComplexFunction && f2 instanceof ComplexFunction) {
+
+			ArrayList<Node> f1List = new ArrayList<Node>();
+			f1List=ArrayListCopy((ComplexFunction)f1);
+			ArrayList<Node> f2List = new ArrayList<Node>();
+			f2List=ArrayListCopy((ComplexFunction)f2);
+
+			int counter=f1List.size();
+			Node Pointer = new Node();
+			Iterator <Node> iter1 = f1List.iterator();
+
+			while (iter1.hasNext()) {
+				this.PolynomList.add(iter1.next());
+
+				if (counter ==1) {
+					Pointer=iter1.next();
+					Pointer.G_op=tempOp;
+				}
+				iter1.next();
+				counter--;
+			}
+
+			Iterator <Node> iter2 = f2List.iterator();
+			while (iter2.hasNext()) {
+				this.PolynomList.add(iter2.next());
+				iter1.next();
+			}
+		}
+
+
+
+		if (f1 instanceof Polynom && f2 instanceof ComplexFunction ) {
+
+			Node temp = new Node((Polynom)f1,Operation.None,null,tempOp);
+
+			this.PolynomList.add(temp);
+
+			ArrayList<Node> f2List = new ArrayList<Node>();
+			f2List=ArrayListCopy((ComplexFunction)f2);
+			Iterator <Node> iter2 = f2List.iterator();
+			while (iter2.hasNext()) {
+				this.PolynomList.add(iter2.next());
+				iter2.next();
+			}
+		}
+
+		if (f1 instanceof ComplexFunction && f2 instanceof Polynom ) {
+
+			ArrayList<Node> f1List = new ArrayList<Node>();
+			f1List=ArrayListCopy((ComplexFunction)f1);
+
+			int counter=f1List.size();
+			Iterator <Node> iter1 = f1List.iterator();
+			Node Pointer = new Node();
+
+			while (iter1.hasNext()) {
+				this.PolynomList.add(iter1.next());
+				if(counter==1) {
+					Pointer=iter1.next();
+					Pointer.G_op=tempOp;
+				}
+				iter1.next();
+				counter--;
+			}
+			Node temp = new Node((Polynom)f2,Operation.None,null,Operation.None);
+			this.PolynomList.add(temp);
+		}
 	}
 
 
 
 	public ComplexFunction(function f,Operation op){
 
-		this.right = null;
-		this.left =  f;
-		this.function_list = new ArrayList<Node>();
-		this.op = Operation.None;
+
+		if (f instanceof Polynom) {
+
+			Node temp = new Node((Polynom) f,Operation.None,null,op);
+			this.PolynomList.add(temp);
+		}
+
+		if (f instanceof ComplexFunction) {
+
+			ArrayList<Node> f1List = new ArrayList<Node>();
+			f1List=ArrayListCopy((ComplexFunction)f);
+
+			int counter=f1List.size();
+			Node Pointer = new Node();
+			Iterator <Node> iter1 = f1List.iterator();
+
+			while (iter1.hasNext()) {
+
+				this.PolynomList.add(iter1.next());
+				if (counter ==1) {
+					Pointer=iter1.next();
+					Pointer.G_op=op;
+				}
+				iter1.next();
+				counter--;
+			}
+		}
 	}
 
 
@@ -144,8 +280,23 @@ public class ComplexFunction implements complex_function{
 	 */
 	public void plus(function f1) {
 
-		Node temp = new Node("plus",f1);
-		function_list.add(temp);
+		if (f1 instanceof Polynom) {
+
+			Node temp = new Node((Polynom) f1,Operation.None,null,Operation.None);
+			this.PolynomList.get(this.PolynomList.size()-1).setG_op(Operation.Plus);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+
+		if (f1 instanceof ComplexFunction) {
+
+			this.PolynomList=CombineLists(this.PolynomList, Operation.Plus, ((ComplexFunction) f1).PolynomList);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
 	}
 
 
@@ -155,10 +306,24 @@ public class ComplexFunction implements complex_function{
 	 */
 	public void mul(function f1) {
 
-		Node temp = new Node("mul" ,f1);
-		function_list.add(temp);
-	}
+		if (f1 instanceof Polynom) {
 
+			Node temp = new Node((Polynom) f1,Operation.None,null,Operation.None);
+			this.PolynomList.get(this.PolynomList.size()-1).setG_op(Operation.Times);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+
+		if (f1 instanceof ComplexFunction) {
+
+			this.PolynomList=CombineLists(this.PolynomList, Operation.Times, ((ComplexFunction) f1).PolynomList);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+	}
 
 	/** Divides this complex_function with the f1 complex_function
 	 * 
@@ -166,8 +331,20 @@ public class ComplexFunction implements complex_function{
 	 */
 	public void div(function f1) {
 
-		Node temp = new Node("div" ,f1);
-		function_list.add(temp);
+		if (f1 instanceof Polynom) {
+
+			Node temp = new Node((Polynom) f1,Operation.None,null,Operation.None);
+			this.PolynomList.get(this.PolynomList.size()-1).setG_op(Operation.Divid);
+			this.PolynomList.add(temp);
+		}
+
+		if (f1 instanceof ComplexFunction) {
+
+			this.PolynomList=CombineLists(this.PolynomList, Operation.Divid, ((ComplexFunction) f1).PolynomList);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
 	}
 
 
@@ -177,10 +354,24 @@ public class ComplexFunction implements complex_function{
 	 */
 	public void max(function f1) {
 
-		Node temp = new Node("max" ,f1);
-		function_list.add(temp);
-	}
+		if (f1 instanceof Polynom) {
 
+			Node temp = new Node((Polynom) f1,Operation.None,null,Operation.None);
+			this.PolynomList.get(this.PolynomList.size()-1).setG_op(Operation.Max);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+
+		if (f1 instanceof ComplexFunction) {
+
+			this.PolynomList = CombineLists(this.PolynomList, Operation.Max, ((ComplexFunction) f1).PolynomList);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+	}
 
 	/** Computes the minimum over this complex_function and the f1 complex_function
 	 * 
@@ -188,8 +379,23 @@ public class ComplexFunction implements complex_function{
 	 */
 	public void min(function f1) {
 
-		Node temp = new Node("min" ,f1);
-		function_list.add(temp);
+		if (f1 instanceof Polynom) {
+
+			Node temp = new Node((Polynom) f1,Operation.None,null,Operation.None);
+			this.PolynomList.get(this.PolynomList.size()-1).setG_op(Operation.Min);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+
+		if (f1 instanceof ComplexFunction) {
+
+			this.PolynomList=CombineLists(this.PolynomList, Operation.Min, ((ComplexFunction) f1).PolynomList);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
 	}
 
 
@@ -198,18 +404,45 @@ public class ComplexFunction implements complex_function{
 	 * @param f1 complex function
 	 */
 	public void comp(function f1) {
+		if (f1 instanceof Polynom) {
 
-		Node temp = new Node("comp" ,f1);
-		function_list.add(temp);
-	}	
+			Node temp = new Node((Polynom) f1,Operation.None,null,Operation.None);
+			this.PolynomList.get(this.PolynomList.size()-1).setG_op(Operation.Comp);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+
+		if (f1 instanceof ComplexFunction) {
+
+			this.PolynomList=CombineLists(this.PolynomList, Operation.Comp, ((ComplexFunction) f1).PolynomList);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+	}
 
 
 	/** returns the left side of the complex function - this side should always exists (should NOT be null).
 	 * @return a function representing the left side of this complex funcation
 	 */
 	public function left() {
-		
-		return this.left;
+
+		ComplexFunction temp =  new ComplexFunction();
+		int counter=this.PolynomList.size();
+		Iterator <Node> iter1 = this.iteretor();
+
+		while (iter1.hasNext()) {
+
+			if (counter ==1) {
+				break;
+			}
+			temp.PolynomList.add(iter1.next());
+			iter1.next();
+			counter--;
+		}
+		return temp;
 	}
 
 
@@ -217,8 +450,11 @@ public class ComplexFunction implements complex_function{
 	 * @return a function representing the left side of this complex funcation
 	 */
 	public function right() {
-	
-		return this.right;
+
+		ComplexFunction temp =  new ComplexFunction();
+		temp.PolynomList.add(this.PolynomList.get(this.PolynomList.size()-1));
+
+		return temp;
 	}
 
 
@@ -228,115 +464,122 @@ public class ComplexFunction implements complex_function{
 	 */
 	public Operation getOp() {
 
-		return this.op;
+		return this.PolynomList.get(this.PolynomList.size()-2).G_op;
 	}
 
 
 
 	public function copy() {
 
-		ComplexFunction cf = new ComplexFunction();
+		ComplexFunction temp = new ComplexFunction();
+		Iterator <Node> iter1 = this.iteretor();
 
-		cf.setLeft(this.left.copy());
-		if(this.right!=null) {
-			cf.setRight(this.right.copy());
-		}else {
-			cf.setRight(null);
+		while (iter1.hasNext()) {
+			Node tempNode = new Node();
+			tempNode=iter1.next().copy();
+			temp.PolynomList.add(tempNode);
+			iter1.next();
 		}
-		cf.setOp(this.op);
-
-
-		ArrayList<Node> tempList = new ArrayList<Node>();
-		Iterator<Node> iter = iteretor();
-		while(iter.hasNext()) {
-			tempList.add(iter.next());
-		}
-		cf.setList(tempList);
-		return cf;
+		return temp;
 	}
-	//function m = new ComplexFunction(this.op.toString(), this.left,this.right);
-	//return m;
 
-
-//	public double f(double x) {
-//		
-//		return 0.0;
-//		
-//	}
 	
 	
+	
+
 	public double f(double x) {
-		
-		
-		
+		double sum = 0.0;
 		Node temp = new Node();
 		
-		
-	
-		Iterator<Node> iter = iteretor();
-		
-		temp=this.function_list.get(0);
-		double sum=0.0;
-		
-		
-		
-		
-		if(temp.f !=null) {
-			//sum = temp;
+		Iterator<Node> iter = this.PolynomList.iterator();
+		if(iter.hasNext()) {
+			sum = calcF(iter.next(),x);
+		iter.next();
 		}
 		
-		
 		while(iter.hasNext()) {
+			
 			temp=iter.next();
-		
+			switch(temp.G_op) {
 			
-		
-			
-			
-			
-			
-			switch(temp.op) {
-			case Plus: op = Operation.Plus;
+			case Plus: sum += calcF(temp,x);
 			break;
-			case Times: op = Operation.Times;
+			case Times: sum *= calcF(temp,x);
 			break;
-			//case  "div": op = Operation.Divid;
-			//break;
-			case Min :op = Operation.Min;
+			case  Divid: sum /= calcF(temp,x);
 			break;
-			case Max:op = Operation.Max;
+			case Min :	;
+			break;
+			case Max: ;
 			break;
 			case Comp:op = Operation.Comp;
 			break;
 			case None:op = Operation.None;
 			break;
 			default: op = Operation.Error;
+			
 			}
-			
-			
-			
-			
-			
-			
 			iter.next();
+		}
+		return sum;	
+	}
+	
+	
+	public double calcF(Node temp,double x) {
+		
+		double sum = 0;
+		
+		if(temp.right == null) {
+			sum = temp.left.f(x);
+		}
+		else {
+			
+			double temp1 = temp.left.f(x);
+			double temp2;
+			switch(temp.P_op) {
+			
+			case Plus: sum = temp1 + temp.right.f(x);
+			break;
+			case Times: sum = temp1 * temp.right.f(x);
+			break;
+			case  Divid: 
+				
+				sum = temp1 / temp.right.f(x);
+				//////////////////////////////////////////////////////////////
+				//// take care in case of Operation.Divid && DivQ
+				
+			break;
+			case Min : temp2 = temp.right.f(x);
+				if(temp1 > temp2)sum = temp2;
+				else sum = temp2;
+			break;
+			case Max: temp2 = temp.right.f(x);
+				if(temp1 > temp2)sum = temp2;
+				else sum = temp1;
+			break;
+			case Comp: sum = temp.right.f(temp1);
+			break;
+			case None: sum = temp1;
+			break;
+			
+			default: sum = 0.0;
+			
+			}		
+			
 			
 		}
 		
-	
 		return sum;
 	}
+	
+	
+	
 
-	
-	
-	
-	
-	
 
 	public function initFromString(String s) {
 
 		s=s.toLowerCase();
 		s=clear_spaces(s);
-		int counter=0;
 
 		if (CheckString(s)==false ) {
 
@@ -348,131 +591,70 @@ public class ComplexFunction implements complex_function{
 			}
 
 			Polynom p = new Polynom(s);
-			ComplexFunction cf = new ComplexFunction(p);
+			ComplexFunction cf = new ComplexFunction();
+			Node answer = new Node();
+			answer.left=p;
+			cf.PolynomList.add(answer);
 			return cf;
 		}
 
 		String temp = s;
 		ComplexFunction ans = new ComplexFunction();
+		Operation tempOp =Operation.None;
 
-		Node pointer = new Node();
-
-	
-		
-		
 		while(temp.length() != 0) {
 
 			int end = Close_Index(temp);
 			int start = Open_Index(end,temp);
 			int column = Column_Index (end,temp);
-			
-			
 			int Case = Check_case(start,column,end,temp);
-			ComplexFunction cf = new ComplexFunction();
-
 
 			if(Case == 1){
 
-				Operation tempOp = get_op(start,s);
-
+				tempOp = get_op(start,s);
 				String s1 = temp.substring(start+1,column);
 				String s2 = temp.substring(column+1,end);
 				Polynom p1 = new Polynom(s1);
 				Polynom p2 = new Polynom(s2);
 
-				PolyQ.add(p1);
-				PolyQ.add(p2);
-				OpQ.add(tempOp);
-				
-				
-				cf = new ComplexFunction(p1,tempOp,p2);
-				
-				Node lastNode = new Node(Operation.None,cf);
-				if(ans.function_list.size()>0){
-					ans.setOp(tempOp);
-					pointer = ans.function_list.get(ans.function_list.size() - 1);
-				}
-				else{
-					pointer.setop(tempOp);
-				}
-				
-			
-				
-				if (counter>0) {
-				ans.left=ans.copy();
-				ans.function_list.add(lastNode);
-			
-				ComplexFunction Right= new ComplexFunction();
-				Right.function_list.add(lastNode);
-				ans.right=Right;
-				}
-				
-				else {
-					
-					
-					ans.left=ans.copy();
-					ans.function_list.add(lastNode);
-					
-					
-					
-					
-				}
-				
-				
-				if(ans.op == Operation.None){
-					int openIndex = Open_Index(start,temp);
-					pointer.op = get_op(openIndex, temp);
-				}
-			}
+				Node tempNodeC = new Node(p1, tempOp, p2, Operation.None);
+				ans.PolynomList.add(tempNodeC);
+
+			}	
 
 			if(Case == 2){
 
-				Operation tempOp = get_op(start,s);
-				ans.setOp(tempOp);
+				tempOp = get_op(start,s); 
 				String s1 = temp.substring(column+1,end);
 				Polynom p = new Polynom(s1);
-				PolyQ.add(p);
-				OpQ.add(tempOp);
-				cf = new ComplexFunction(p);
-				Node lastNode = new Node(Operation.None,cf);
-				pointer = ans.function_list.get(ans.function_list.size()-1);
-				pointer.setop(tempOp);	
-				ans.left=ans.copy();
-				ans.function_list.add(lastNode);
-				ComplexFunction Right= new ComplexFunction();
-				Right.function_list.add(lastNode);
-				ans.right=Right;
-		
-			}
 
+				ans.PolynomList.get(ans.PolynomList.size()-1).setG_op(tempOp);
+				Node tempNodeC = new Node(p,Operation.None,null,Operation.None);
+				ans.PolynomList.add(tempNodeC);
+			}
 
 			if(Case == 3){
 
-				Operation tempOp = get_op(start,s);
-				ans.setOp(tempOp);
+				tempOp = get_op(start,s); 
 				String s1 = temp.substring(start+1,column);
 				Polynom p = new Polynom(s1);
-				PolyQ.add(p);
-				OpQ.add(tempOp);
-				cf = new ComplexFunction(p);
-				Node lastNode = new Node(Operation.None,cf);
-				pointer = ans.function_list.get(ans.function_list.size()-1);
-				pointer.setop(tempOp);
-				ans.left=ans.copy();
-				ans.function_list.add(lastNode);
-				ComplexFunction Right= new ComplexFunction();
-				Right.function_list.add(lastNode);
-				ans.right=Right;
+				ans.PolynomList.get(ans.PolynomList.size()-1).setG_op(tempOp);
+
+				Node tempNodeC = new Node(p,Operation.None,null,Operation.None);
+				ans.PolynomList.add(tempNodeC);
+
 				if (tempOp == Operation.Divid) {
-					ans.DivQ.add(ans.function_list.size()-1);
-					System.out.println("Entered to Queue:" +ans.DivQ.peek());
+					ans.DivQ.add(ans.PolynomList.size()-1);
 				}
 			}
 			int length = get_op_length(start,temp);
 			temp = temp.substring(0, start-length) + temp.substring(end+1);
-			counter++;
+
 		}
-	
+		ans.left = ans.left();
+		ans.right = ans.right();
+		ans.op = ans.getOp();
+
 		return ans;
 	}
 
@@ -482,7 +664,7 @@ public class ComplexFunction implements complex_function{
 	////////// Private Methods: //////////////
 
 	private Iterator<ComplexFunction.Node> iteretor() {
-		return this.function_list.iterator();
+		return this.PolynomList.iterator();
 	}
 
 
@@ -526,9 +708,9 @@ public class ComplexFunction implements complex_function{
 		}
 		return Open_Index;
 	}
-	
-	
-	
+
+
+
 	/*
 	 * this function returns index of the first ','
 	 */
@@ -542,15 +724,15 @@ public class ComplexFunction implements complex_function{
 				break;
 			}
 		}
-		
+
 		return Column_Index;
 	}
-	
-	
+
+
 	/*
 	 * This function returns the operation of a given string.
 	 */
-	public void get_operator(String str){
+	public void get_operator(String str){ 
 
 		switch(str) {
 		case "plus": op = Operation.Plus;
@@ -581,7 +763,7 @@ public class ComplexFunction implements complex_function{
 		if (temp.equals("div")) return Operation.Divid;
 		if (temp.equals("min")) return Operation.Min;
 		if (temp.equals("max")) return Operation.Max;
-		
+
 		temp=str.substring(Index-4,Index);
 		if (temp.equals("plus")) return Operation.Plus;
 		if (temp.equals("comp")) return Operation.Comp;
@@ -608,9 +790,6 @@ public class ComplexFunction implements complex_function{
 		String temp = str;
 		int Case = 1;
 
-		System.out.println(str);
-		System.out.println();
-
 		String s1 = str.substring(start+1, column);
 		String s2 = temp.substring(column+1, end);
 
@@ -632,7 +811,7 @@ public class ComplexFunction implements complex_function{
 
 
 	public static ComplexFunction StringToComplex (String s1,Operation op){
-		
+
 		Polynom p1 = new Polynom(s1);
 		ComplexFunction cf = new ComplexFunction(p1,op);
 		return cf;
@@ -690,32 +869,32 @@ public class ComplexFunction implements complex_function{
 	public void setLeft(function left) {
 		this.left = left;
 	}
-	
+
 	public void setRight(function right) {
 		this.right = right;
 	}
-	
+
 	public void setOp(Operation op) {
 		this.op = op;
 	}
-	
+
 	public ArrayList<Node> getList() {
-		return (ArrayList<Node>) this.function_list;
+		return (ArrayList<Node>) this.PolynomList;
 	}
-	
+
 	public void setList(ArrayList<Node> function_list) {
-		this.function_list = function_list;
+		this.PolynomList = function_list;
 	}
 
 
 	public static int get_op_length(int Index, String str){
 
 		int ans=0;
-		
+
 		String temp=str.substring(Index-3,Index);
 		if (temp.equals("mul") || temp.equals("div") || temp.equals("min") || temp.equals("max") ) {
-			 ans = 3;
-			 return ans;
+			ans = 3;
+			return ans;
 		}
 
 		temp=str.substring(Index-4,Index);
@@ -726,20 +905,45 @@ public class ComplexFunction implements complex_function{
 
 
 
-	public ArrayList<Node> ArrayListCopy(ArrayList list){
-		
+	public ArrayList<Node> ArrayListCopy(ComplexFunction cf){
+
 		ArrayList<Node> copy =  new ArrayList();
-		
-		
-		
-		
-		return function_list;
-		
-		
-		
-		
-		
+
+		Iterator<Node> iter = cf.iteretor();
+		while(iter.hasNext()) {
+			Node temp = new Node();
+			temp=iter.next().copy();
+			copy.add(iter.next());
+		}
+
+
+
+		return copy;
+
 	}
+
+
+	public ArrayList<Node> CombineLists(ArrayList<Node> list1,Operation op, ArrayList<Node> list2){
+
+		ArrayList<Node> ans = new ArrayList<Node>();
+		Iterator <Node> iter1 = list1.iterator();
+
+		while (iter1.hasNext()) {
+			ans.add(iter1.next());
+			iter1.next();
+		}
+
+		ans.get(this.PolynomList.size()-1).setG_op(op);
+		Iterator <Node> iter2 = list2.iterator();
+
+		while (iter2.hasNext()) {
+			ans.add(iter2.next());
+			iter2.next();
+		}
+		
+		return ans;
+	}
+	
 	
 	
 
