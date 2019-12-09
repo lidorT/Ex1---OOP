@@ -14,6 +14,7 @@ public class PolynomTest {
 		cf2.initFromString("mul(+1.0x +3.0,+1.0x -2.0)");
 		//System.out.println(cf.toString());
 		//System.out.println(cf2.toString());
+		
 		cf1.mul(cf2);
 		cf.mul(cf2);
 		System.out.println(cf1.toString());

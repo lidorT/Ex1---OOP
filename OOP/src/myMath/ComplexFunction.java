@@ -7,6 +7,7 @@ public class ComplexFunction implements complex_function{
 
 	//	/* A binary tree class in order to represents the complex function.
 	//	 * 
+	
 	//	 */
 	//	class BinaryTree {
 	//	    BinaryTree left;
