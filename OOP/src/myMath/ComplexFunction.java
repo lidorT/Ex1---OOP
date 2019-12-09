@@ -629,7 +629,7 @@ public class ComplexFunction implements complex_function{
 				Polynom p = new Polynom(s1);
 
 				this.PolynomList.get(this.PolynomList.size()-1).setG_op(tempOp);
-				Node tempNodeC = new Node(p,Operation.None,null,Operation.None);
+				Node tempNodeC = new Node(null,Operation.None,p,Operation.None);
 				this.PolynomList.add(tempNodeC);
 			}
 
@@ -864,7 +864,34 @@ public class ComplexFunction implements complex_function{
 
 
 	public String toString() {
-		return this.left().toString();
+		
+		if(this.PolynomList.isEmpty())return null;
+		String ans = "";
+		
+		Iterator<Node> iter = this.iteretor();
+		Node temp = new Node();
+		temp = iter.next();
+		
+		ans = temp.P_op.toString() +"("+ temp.left.toString()+","+temp.right.toString()+")";
+		
+		while(iter.hasNext()) {
+			
+			Operation op = temp.G_op;
+			temp = iter.next();
+			
+			if(temp.right == null)
+			ans = op.toString() +"("+ temp.left.toString()+","+ans+")";
+			
+			if(temp.left == null)
+				ans = op.toString() +"("+ans+","+ temp.right.toString()+")";
+			
+			if(temp.left!=null && temp.right!=null){
+				ans = temp.G_op.toString() +
+					"("+ans+","+temp.P_op.toString()+"("+ temp.left.toString()+","
+					+temp.right.toString()+")";
+			}
+		}
+		return ans;
 	}
 
 
