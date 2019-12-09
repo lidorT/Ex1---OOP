@@ -432,14 +432,14 @@ public class ComplexFunction implements complex_function{
 		ComplexFunction temp =  new ComplexFunction();
 		int counter=this.PolynomList.size();
 		Iterator <Node> iter1 = this.iteretor();
-
+		Node tempN = new Node();
 		while (iter1.hasNext()) {
 
 			if (counter ==1) {
 				break;
 			}
-			temp.PolynomList.add(iter1.next());
-			iter1.next();
+			tempN = iter1.next();
+			temp.PolynomList.add(tempN);
 			counter--;
 		}
 		return temp;
@@ -889,9 +889,9 @@ public class ComplexFunction implements complex_function{
 				ans = op.toString() +"("+ans+","+ temp.right.toString()+")";
 			
 			if(temp.left!=null && temp.right!=null){
-				ans = temp.G_op.toString() +
+				ans = op.toString() +
 					"("+ans+","+temp.P_op.toString()+"("+ temp.left.toString()+","
-					+temp.right.toString()+")";
+					+temp.right.toString()+")"+")";
 			}
 		}
 		return ans;
@@ -959,18 +959,20 @@ public class ComplexFunction implements complex_function{
 
 		ArrayList<Node> ans = new ArrayList<Node>();
 		Iterator <Node> iter1 = list1.iterator();
+		Node temp = new Node();
 
 		while (iter1.hasNext()) {
-			ans.add(iter1.next());
-			iter1.next();
+			temp = iter1.next();
+			ans.add(temp);
 		}
 
-		ans.get(this.PolynomList.size()-1).setG_op(op);
+		ans.get(ans.size()-1).setG_op(op);
 		Iterator <Node> iter2 = list2.iterator();
-
+		temp = new Node();
+	
 		while (iter2.hasNext()) {
-			ans.add(iter2.next());
-			iter2.next();
+			temp = iter2.next();
+			ans.add(temp);
 		}
 		
 		return ans;
