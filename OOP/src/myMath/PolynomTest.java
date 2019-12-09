@@ -6,12 +6,18 @@ public class PolynomTest {
 		
 
 		ComplexFunction cf = new ComplexFunction();
+		ComplexFunction cf1 = new ComplexFunction();
 		ComplexFunction cf2 = new ComplexFunction();
 		
 		cf.initFromString("plus(plus(+1.0x+1.0,mul(mul(+1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)");
-		cf2.initFromString("plus(5x+1,mul(+1.0x +3.0,+1.0x -2.0))");
-	//	cf.mul(cf2);
+		cf1.initFromString("plus(+1.0x+1.0,mul(+1.0x +3.0,+1.0x -2.0))");
+		cf2.initFromString("mul(+1.0x +3.0,+1.0x -2.0)");
 		//System.out.println(cf.toString());
+		//System.out.println(cf2.toString());
+		cf1.mul(cf2);
+		cf.mul(cf2);
+		System.out.println(cf1.toString());
+		System.out.println(cf.toString());
 		
 		
 		
