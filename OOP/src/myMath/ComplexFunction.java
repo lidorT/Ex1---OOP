@@ -464,6 +464,9 @@ public class ComplexFunction implements complex_function{
 	 */
 	public Operation getOp() {
 
+		if(this.PolynomList.size()==1){
+			return this.PolynomList.get(this.PolynomList.size()-1).G_op;
+		}
 		return this.PolynomList.get(this.PolynomList.size()-2).G_op;
 	}
 
@@ -936,7 +939,7 @@ public class ComplexFunction implements complex_function{
 
 	public ArrayList<Node> ArrayListCopy(ComplexFunction cf){
 
-		ArrayList<Node> copy =  new ArrayList();
+		ArrayList<Node> copy =  new ArrayList<Node>();
 
 		Iterator<Node> iter = cf.iteretor();
 		while(iter.hasNext()) {
