@@ -599,7 +599,7 @@ public class ComplexFunction implements complex_function{
 		}
 
 		String temp = s;
-		ComplexFunction ans = new ComplexFunction();
+		//ComplexFunction ans = new ComplexFunction();
 		Operation tempOp =Operation.None;
 
 		while(temp.length() != 0) {
@@ -618,7 +618,7 @@ public class ComplexFunction implements complex_function{
 				Polynom p2 = new Polynom(s2);
 
 				Node tempNodeC = new Node(p1, tempOp, p2, Operation.None);
-				ans.PolynomList.add(tempNodeC);
+				this.PolynomList.add(tempNodeC);
 
 			}	
 
@@ -628,9 +628,9 @@ public class ComplexFunction implements complex_function{
 				String s1 = temp.substring(column+1,end);
 				Polynom p = new Polynom(s1);
 
-				ans.PolynomList.get(ans.PolynomList.size()-1).setG_op(tempOp);
+				this.PolynomList.get(this.PolynomList.size()-1).setG_op(tempOp);
 				Node tempNodeC = new Node(p,Operation.None,null,Operation.None);
-				ans.PolynomList.add(tempNodeC);
+				this.PolynomList.add(tempNodeC);
 			}
 
 			if(Case == 3){
@@ -638,24 +638,26 @@ public class ComplexFunction implements complex_function{
 				tempOp = get_op(start,s); 
 				String s1 = temp.substring(start+1,column);
 				Polynom p = new Polynom(s1);
-				ans.PolynomList.get(ans.PolynomList.size()-1).setG_op(tempOp);
+				this.PolynomList.get(this.PolynomList.size()-1).setG_op(tempOp);
 
 				Node tempNodeC = new Node(p,Operation.None,null,Operation.None);
-				ans.PolynomList.add(tempNodeC);
+				this.PolynomList.add(tempNodeC);
 
 				if (tempOp == Operation.Divid) {
-					ans.DivQ.add(ans.PolynomList.size()-1);
+					this.DivQ.add(this.PolynomList.size()-1);
 				}
 			}
 			int length = get_op_length(start,temp);
 			temp = temp.substring(0, start-length) + temp.substring(end+1);
 
 		}
-		ans.left = ans.left();
-		ans.right = ans.right();
-		ans.op = ans.getOp();
+		this.left = this.left();
+		this.right = this.right();
+		this.op = this.getOp();
 
-		return ans;
+		
+		
+		return this;
 	}
 
 
