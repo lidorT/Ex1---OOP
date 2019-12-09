@@ -360,7 +360,7 @@ public class Polynom implements Polynom_able {
 	
 
 	/**
-	 * This function prints as a string the current Polynom.
+	 * This function prints as a string of the current Polynom.
 	 */
 	public String toString() {
 		String ans = "";
