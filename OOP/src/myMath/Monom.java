@@ -2,7 +2,6 @@ package myMath;
 
 import java.util.Comparator;
 
-
 /**
  * This class represents a simple "Monom" of shape a*x^b, where a is a real
  * number and a is an integer (summed a none negative), The class implements function and
@@ -12,9 +11,6 @@ import java.util.Comparator;
  */
 public class Monom implements function {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public static final Monom ZERO = new Monom(0, 0);
 	public static final Monom MINUS1 = new Monom(-1, 0);
@@ -25,7 +21,19 @@ public class Monom implements function {
 		return _Comp;
 	}
 
+
+	/**
+	 * Constructor
+	 * @param a - double
+	 * @param b - Integer
+	 */
 	public Monom(double a, int b) { // ax^b
+		
+		if (a!=0) {
+			String str = Double.toString(a);
+			str=String.format("%.5g%n",a);
+			a= Double.parseDouble(str);
+		}
 		if (a == 0) {
 			this.set_coefficient(0);
 			this.set_power(0);
@@ -34,21 +42,34 @@ public class Monom implements function {
 		this.set_power(b);
 	}
 
+	/**
+	 * Constructor
+	 * @param m - Monom
+	 */
 	public Monom(Monom m) { 
 		this(m.get_coefficient(), m.get_power());
 	}
 
+
+	/**
+	 * @return - this._coefficient
+	 */
 	public double get_coefficient() {
 		return this._coefficient;
 	}
 
+
+	/**
+	 * @return - this._power
+	 */
 	public int get_power() {
 		return this._power;
 	}
 
+
 	/**
 	 * this method returns the derivative of the Monom .
-	 * @return
+	 * @return derivative of the Monom
 	 */
 	public Monom derivative() {
 		if (this.get_power() == 0) {
@@ -57,6 +78,10 @@ public class Monom implements function {
 		return new Monom(this.get_coefficient() * this.get_power(), (this.get_power() - 1));
 	}
 
+
+	/**
+	 * This function calculating f(x) from a giving x
+	 */
 	public double f(double x) {
 		double ans = 0;
 		double p = this.get_power();
@@ -64,14 +89,21 @@ public class Monom implements function {
 		return ans;
 	}
 
+	
+	/**
+	 * @return boolean - true,if this Monom is zero
+	 * @return boolean - false,if this Monom is not a zero Monom
+	 */
 	public boolean isZero() {
 		return this.get_coefficient() == 0;
 	}
 
-	// ***************** add your code below **********************
 
+	/**
+	 * This function receiving a String s and return a function that represent the giving string.
+	 */
 	public function initFromString(String s){
-		
+
 		String temp;
 		temp = s.substring(0, s.indexOf('='));
 		temp = temp.toLowerCase();
@@ -79,11 +111,11 @@ public class Monom implements function {
 			throw new RuntimeException("You entered an invaild input, please enter a function at the form of: y=f(x)");
 		}
 		function f = new Monom(s.substring(s.charAt('=')+1));
-		
+
 		return f;
 	}
-	
-	
+
+
 	/**
 	 * This functioin responsible to build a Monom from the input string.
 	 * If the string contains more than 1 power symbol ('^') or more than one x we throw exception.
@@ -97,7 +129,10 @@ public class Monom implements function {
 	 * @param s - given string that should present a Monom.
 	 */
 	public Monom(String s) {
+		
 		s = s.toLowerCase();
+		s=clear_spaces(s);
+		
 		String err = "ERROR, Invalid input: required ax^b, where a is a real number and b is an integer (summed a none negative)";
 
 		boolean flag = false, pow = false;
@@ -119,7 +154,7 @@ public class Monom implements function {
 			if (flag && pow) { ///// if we have 'x' and '^' in String s
 				i=s.indexOf('x');
 				j=s.indexOf('^');
-				
+
 				String n1 = s.substring(0, i);
 				String n2 = s.substring(j + 1);
 				if(i != 0 && j+1 != s.length()){
@@ -130,18 +165,21 @@ public class Monom implements function {
 						}
 						else n1 = n1.substring(1);
 					}
-					
+
 					if (n1.charAt(0)=='-'){
-						
+
 						if(n1.length() == 1){
 							n1 = "-1"; //case if we have +coefficient
 						}
 						else n1 = n1.substring(1);
-						
+
 					}
 
 					if (isDouble(n1)) {
-						this.set_coefficient(Double.parseDouble(n1));
+						double ncopy = Double.parseDouble(n1);
+						n1=String.format("%.5g%n",ncopy);
+						ncopy = Double.parseDouble(n1);
+						this.set_coefficient(ncopy);
 					} else
 						throw new RuntimeException(err);
 					if (isInt(n2)) {
@@ -165,14 +203,18 @@ public class Monom implements function {
 						String n1 = s.substring(0, i);
 						if (n1.equals("-")) {
 							this.set_coefficient(-1); ///// if the string include only '-x'
-							
+
 						}
 						if (n1.equals("+")) {
 							this.set_coefficient(1); // if the string include only '+x'
 						}
 						else if(n1.equals("+")==false && n1.equals("-")==false){
-							if (isDouble(n1))
-								this.set_coefficient(Double.parseDouble(n1));
+							if (isDouble(n1)){
+								double n1copy = Double.parseDouble(n1);
+								n1=String.format("%.5g%n",n1copy);
+								n1copy = Double.parseDouble(n1);
+								this.set_coefficient(n1copy);	
+							}
 							else
 								throw new RuntimeException(err);
 						}
@@ -211,7 +253,7 @@ public class Monom implements function {
 		}
 	}
 
-	
+
 
 	/**
 	 *This function calculating the sum of two Monoms.
@@ -227,6 +269,7 @@ public class Monom implements function {
 		}
 	}
 
+	
 	/**
 	 *This function subtracts two Monoms.
 	 *If the two Monoms powers are not equal it throws RuntimeException.
@@ -243,6 +286,7 @@ public class Monom implements function {
 		}
 	}
 
+	
 	/**
 	 * This function multiply the current Monom with the given one.
 	 * If one of the monoms is a zero we set the current one to be a zero Monom.
@@ -266,6 +310,7 @@ public class Monom implements function {
 			this.set_power(this.get_power() + d.get_power());
 		}
 	}
+
 	
 	/**
 	 * This function prints as a string the current monom.
@@ -282,8 +327,8 @@ public class Monom implements function {
 		} else
 			return this._coefficient + "x^" + this._power;
 	}
-	
-	
+
+
 	/**
 	 * This function checks if two monoms are equals.
 	 * We create two strings and convert the Monoms into strings using the toString<object> function.
@@ -303,19 +348,24 @@ public class Monom implements function {
 
 		return ans;
 	}
-	
-	
+
+
+	/**
+	 * This is a deep copy function that return function.
+	 */
 	public function copy() {
 		Monom m = new Monom(this);
 		function f = new Monom(m);
 		return f;
 	}
-	
-	
+
+
 	// *************************************************************
 	// ****************** Private Methods and Data *****************
 	// *************************************************************
 
+	
+	
 	/**
 	 * This is a private function that checks if a given string is a double or not.
 	 * If the given string is a double the function returns true, else it returns false.
@@ -332,6 +382,7 @@ public class Monom implements function {
 		return ans;
 	}
 
+	
 	/**
 	 * This is a private function that checks if a given string is an Integer or not.
 	 * If the given string is an Integer the function returns true, else it returns false.
@@ -347,6 +398,7 @@ public class Monom implements function {
 		}
 		return ans;
 	}
+
 	
 	/**
 	 * private method to set a coefficient of a monom
@@ -356,6 +408,7 @@ public class Monom implements function {
 		this._coefficient = a;
 	}
 
+	
 	/**
 	 * private method to set a power of a monom
 	 * @param a - an Integer input that will be set as the current Monom power.
@@ -367,11 +420,26 @@ public class Monom implements function {
 		this._power = p;
 	}
 
+	
+	/**
+	 * This function gets a string and returns it without spaces 
+	 * for example:
+	 * input : "3x^2 + 6x^3"
+	 * output: "3x^2+6x^3"
+	 * @param s - a String that represent a ComplexFunction.
+	 * @return s - a String without spaces that represent a ComplexFunction.
+	 */
+	private String clear_spaces(String s) {
+		s=s.replaceAll(" ","");
+		return s;
+	}
+	
+	
 	/**
 	 * This function generate a Zero monom (0.0,0)
-	 * @return
+	 * @return Zero Monom
 	 */
-	private static Monom getNewZeroMonom() {
+	private Monom getNewZeroMonom() {
 		return new Monom(ZERO);
 	}
 

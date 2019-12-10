@@ -4,47 +4,31 @@ public class PolynomTest {
 	public static void main(String[] args) {
 
 		
-
+		Polynom p1 = new Polynom("3.0x");
+		Polynom p2 = new Polynom("5.0x");
 		ComplexFunction cf = new ComplexFunction();
-		ComplexFunction cf1 = new ComplexFunction();
+		ComplexFunction cf1 = new ComplexFunction("comp(+1.0x -2.0,+1.0x +3.0)");
 		ComplexFunction cf2 = new ComplexFunction();
+		ComplexFunction cf3 = new ComplexFunction(p1,Operation.Plus,p2);
 		
-		cf.initFromString("plus(plus(+1.0x+1.0,mul(mul(-1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)");
-		cf1.initFromString("mul(+1.0x -2.0,+1.0x +3.0)");
-		cf2.initFromString("plus(+1.0x +3.0,+1.0x -2.0)");
+		cf.initFromString("plus(div(+1.0x+1.0,mul(mul(-1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)");
+		//cf1.initFromString("comp(+1.0x -2.0,+1.0x +3.0)");
+		//cf2.initFromString("8.0x");
+		System.out.println(cf1.toString());
+		//System.out.println(cf2.toString());
+		//System.out.println(cf3.toString());
+		//System.out.println(cf3.equals(cf2));
+		
+		
 		//System.out.println(cf.toString());
 		//System.out.println(cf2.toString());
 		
 		//cf1.div(cf2);
 		//cf1.max(cf2);
-		System.out.println(cf.toString());
-		System.out.println(cf.f(1));
-		//System.out.println("did they equals ? "+cf1.equals(cf2));
-	
-		
-		
-		
-//		System.out.println("******************");
-//		System.out.println(cf.PolyQ.toString());
-//		System.out.println(cf.OpQ.toString());
-//
-//		ComplexFunction cf2 = new ComplexFunction();
-//		ComplexFunction cf3 = new ComplexFunction();
-//		cf2=cf.copyCF();
-//		cf.mul(cf2);
-		
-		
-	
-		
 		//System.out.println(cf.toString());
-
-
-		//System.out.println("Close index check: "+ComplexFunction.Close_Index(str));
-
-		//System.out.println("Close index check: "+ComplexFunction.Open_Index(ComplexFunction.Close_Index(str),str));
-
-		//System.out.println("Close index check: "+ComplexFunction.Column_Index(ComplexFunction.Close_Index(str),str));
-
+		//System.out.println(cf.f(1));
+		//System.out.println(cf1.f(1));
+		//System.out.println("did they equals ? "+cf1.equals(cf2));
 
 
 

@@ -1,6 +1,7 @@
 package myMath;
 
 import java.util.Iterator;
+import org.junit.Before;
 import myMath.ComplexFunction;
 import myMath.Functions_GUI;
 import myMath.Monom;
@@ -9,8 +10,8 @@ import myMath.Polynom;
 import myMath.Range;
 import myMath.function;
 import myMath.functions;
-/**
- 
+
+/** 
  * Partial JUnit + main test for the GUI_Functions class, expected output from the main:
  * 0) java.awt.Color[r=0,g=0,b=255]  f(x)= plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0)
 1) java.awt.Color[r=0,g=255,b=255]  f(x)= plus(div(+1.0x +1.0,mul(mul(+1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)
@@ -19,10 +20,9 @@ import myMath.functions;
 4) java.awt.Color[r=255,g=0,b=0]  f(x)= +0.1x^5 -1.2999999999999998x +5.0
 5) java.awt.Color[r=0,g=255,b=0]  f(x)= max(max(max(max(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),plus(div(+1.0x +1.0,mul(mul(+1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)),div(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),-1.0x^4 +2.4x^2 +3.1)),-1.0x^4 +2.4x^2 +3.1),+0.1x^5 -1.2999999999999998x +5.0)
 6) java.awt.Color[r=255,g=175,b=175]  f(x)= min(min(min(min(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),plus(div(+1.0x +1.0,mul(mul(+1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)),div(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),-1.0x^4 +2.4x^2 +3.1)),-1.0x^4 +2.4x^2 +3.1),+0.1x^5 -1.2999999999999998x +5.0)
-
  * @author boaz_benmoshe
- *
  */
+
 class Functions_GUITest {
 	public static void main(String[] a) {
 		
@@ -31,25 +31,34 @@ class Functions_GUITest {
 		Range rx = new Range(-10,10);
 		Range ry = new Range(-5,15);
 		data.drawFunctions(w,h,rx,ry,res);
-		String file = "function_file.txt";
-		String file2 = "function_file2.txt";
-		try {
-			data.saveToFile(file);
-			Functions_GUI data2 = new Functions_GUI();
-			data2.initFromFile(file);
-			data.saveToFile(file2);
-		}
-		catch(Exception e) {e.printStackTrace();}
 		
-		String JSON_param_file = "GUI_params.txt";
-		data.drawFunctions(JSON_param_file);
+		
+//		String file = "function_file.txt";
+//		String file2 = "function_file2.txt";
+//		try {
+//			data.saveToFile(file);
+//			Functions_GUI data2 = new Functions_GUI();
+//			data2.initFromFile(file);
+//			data.saveToFile(file2);
+//		}
+//		catch(Exception e) {e.printStackTrace();}
+//		
+//		String JSON_param_file = "GUI_params.txt";
+//		data.drawFunctions(JSON_param_file);
+//		
+//		
+		
+		
+		
 	}
+	
 	private functions _data=null;
-//	@BeforeAll
-//	static void setUpBeforeClass() throws Exception {
-//	}
+	
+	//@BeforeAll
+	static void setUpBeforeClass() throws Exception {
+	}
 
-	//@BeforeEach
+	@Before
 	void setUp() throws Exception {
 		_data = FunctionsFactory();
 	}
@@ -81,7 +90,9 @@ class Functions_GUITest {
 		_data.drawFunctions("GUI_params.txt");
 		//fail("Not yet implemented");
 	}
+	
 	public static functions FunctionsFactory() {
+		
 		functions ans = new Functions_GUI();
 		String s1 = "3.1 +2.4x^2 -x^4";
 		String s2 = "5 +2x -3.3x +0.1x^5";
@@ -108,15 +119,15 @@ class Functions_GUITest {
 		ans.add(cf6.copy());
 		Iterator<function> iter = ans.iterator();
 		function f = iter.next();
-//		ComplexFunction max = new ComplexFunction(f);
-//		ComplexFunction min = new ComplexFunction(f);
-//		while(iter.hasNext()) {
-//			f = iter.next();
-//			max.max(f);
-//			min.min(f);
-//		}
-//		ans.add(max);
-//		ans.add(min);		
+		ComplexFunction max = new ComplexFunction(f);
+		ComplexFunction min = new ComplexFunction(f);
+		while(iter.hasNext()) {
+			f = iter.next();
+			max.max(f);
+			min.min(f);
+		}
+		ans.add(max);
+		ans.add(min);		
 		return ans;
 	}
 }

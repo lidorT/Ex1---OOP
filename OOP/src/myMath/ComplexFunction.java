@@ -2,8 +2,6 @@ package myMath;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.junit.runner.Request;
-
 public class ComplexFunction implements complex_function{
 
 
@@ -24,14 +22,20 @@ public class ComplexFunction implements complex_function{
 	 * second node will hold the right function (f2)
 	 * after that we store the nodes in the complex function array list.
 	 */
-	private function left,right;
-	private Operation op;
+	public function left,right;
+	public Operation op;
 	public ArrayList<Node> PolynomList = new ArrayList<>(); 
-	public Queue<Integer>DivQ = new ArrayDeque<Integer>();
+	private Queue<Integer>DivQ = new ArrayDeque<Integer>();
 	private static final long serialVersionUID = 1L;
 
 
-
+	/**
+	 * This class has an internal class of Nodes that will be chained in an ArrayList to represent each ComplexFunction.
+	 * Each Node has a field named left and right to hold two Polynoms.
+	 * Each Node has a field named P_op in order to hold the operation between the two Polynoms.
+	 * Each Node has a field named G_op in order to hold the operation between two Nodes and chain all into 1
+	 * @author Lidor and Zohar
+	 */
 	class Node {
 
 		private Operation G_op;
@@ -39,29 +43,25 @@ public class ComplexFunction implements complex_function{
 		private Polynom left;
 		private Polynom right;
 
-		public Node() {
+		private Node() {
 			this.G_op=Operation.None;
 			this.P_op=Operation.None;
 			this.left = null;
 			this.right=null;
 		}
 
-
-		public Node(Polynom p1,Operation P_op , Polynom p2, Operation G_op) {
+		private Node(Polynom p1,Operation P_op , Polynom p2, Operation G_op) {
 			this.left = p1;
 			this.right =p2;
 			this.P_op = P_op;
 			this.G_op= G_op;
 		}
 
-
-		public void setG_op(Operation op) {
+		private void setG_op(Operation op) {
 			this.G_op = op;
 		}
-		public void setP_op(Operation op) {
-			this.P_op = op;
-		}
-		public Node copy() {
+	
+		private Node copy() {
 			Node temp = new Node(this.left,this.P_op,this.right,this.G_op);
 			return temp;
 
@@ -79,7 +79,7 @@ public class ComplexFunction implements complex_function{
 
 
 	/**
-	 * This contractor creating ComplexFunction that holds Polynom p 
+	 * This contractor creates ComplexFunction that holds Polynom p 
 	 * @param p - represent an Object from type Polynom
 	 */
 	public ComplexFunction(Polynom p){
@@ -97,6 +97,10 @@ public class ComplexFunction implements complex_function{
 	 * @param f2 - function f2
 	 */
 	public ComplexFunction(function f1,Operation op, function f2){
+		
+		if(op == Operation.None){
+			throw new RuntimeException("Error, operation could not be None");
+		}
 
 		if (f1 instanceof Polynom && f2 instanceof Polynom) {
 			Node temp = new Node((Polynom)f1,op,(Polynom)f2,Operation.None);
@@ -131,8 +135,6 @@ public class ComplexFunction implements complex_function{
 
 			}
 		}
-
-
 
 		if (f1 instanceof Polynom && f2 instanceof ComplexFunction ) {
 
@@ -182,7 +184,7 @@ public class ComplexFunction implements complex_function{
 	public ComplexFunction(String operator, function f1, function f2) {
 
 		int z = operator.length();
-		Operation tempOp = get_op(z-1, operator);
+		Operation tempOp = get_operator(operator);
 
 		if (f1 instanceof Polynom && f2 instanceof Polynom) {
 			Node temp = new Node((Polynom)f1,tempOp,(Polynom)f2,Operation.None);
@@ -231,7 +233,7 @@ public class ComplexFunction implements complex_function{
 			Iterator <Node> iter2 = f2List.iterator();
 			while (iter2.hasNext()) {
 				this.PolynomList.add(iter2.next());
-				iter2.next();
+				//iter2.next();
 			}
 		}
 
@@ -289,6 +291,33 @@ public class ComplexFunction implements complex_function{
 				}
 				iter1.next();
 				counter--;
+			}
+		}
+	}
+
+
+	public ComplexFunction(String s) {
+		this.initFromString(s);
+	}
+
+
+	public ComplexFunction(function f) {
+		
+		if (f instanceof Polynom || f instanceof Monom ) {
+			Node temp = new Node((Polynom) f,Operation.None,null,Operation.None);
+			this.PolynomList.add(temp);
+		}
+
+		if (f instanceof ComplexFunction){
+
+			ArrayList<Node> fList = new ArrayList<Node>();
+			fList=ArrayListCopy((ComplexFunction)f);
+			Node Pointer = new Node();
+			Iterator <Node> iter1 = fList.iterator();
+
+			while (iter1.hasNext()) {
+				Pointer=iter1.next();
+				this.PolynomList.add(Pointer);
 			}
 		}
 	}
@@ -509,7 +538,7 @@ public class ComplexFunction implements complex_function{
 			Node tempNode = new Node();
 			tempNode=iter1.next().copy();
 			temp.PolynomList.add(tempNode);
-			iter1.next();
+			//iter1.next();
 		}
 		return temp;
 	}
@@ -521,6 +550,8 @@ public class ComplexFunction implements complex_function{
 	 * @return sum - stabilizes the function value at point x.
 	 */
 	public double f(double x) {
+		
+		int counter = 0;
 		double sum = 0.0;
 		Node temp = new Node();
 		Operation tempOp = Operation.None;
@@ -529,6 +560,7 @@ public class ComplexFunction implements complex_function{
 			temp=iter.next();
 			tempOp = temp.G_op;
 			sum = calcF(temp,x);
+			counter++;
 		}
 		if(this.PolynomList.size()>1){
 			while(iter.hasNext()) {
@@ -540,13 +572,25 @@ public class ComplexFunction implements complex_function{
 				break;
 				case Times: sum *= calcF(temp,x);
 				break;
-				case  Divid: sum /= calcF(temp,x);
+				case  Divid: 
+					if(!DivQ.isEmpty()){
+						if(DivQ.peek()==counter){
+						sum = 1/sum;
+						double tempcalc = 1/(calcF(temp,x));
+						sum = sum/tempcalc;
+						DivQ.poll();
+						DivQ.add(counter);
+						}
+					}	
+				else{ 
+					sum /= calcF(temp,x);
+				}
 				break;
-				case Min :	;
+				case Min :if(sum > calcF(temp,x)) sum = calcF(temp,x);
 				break;
-				case Max: ;
+				case Max: if(sum < calcF(temp,x)) sum = calcF(temp,x);
 				break;
-				case Comp:op = Operation.Comp;
+				case Comp: sum = calcF(temp,sum);
 				break;
 				case None:break;
 				default: op = Operation.Error;
@@ -556,53 +600,6 @@ public class ComplexFunction implements complex_function{
 			}
 		}
 		return sum;	
-	}
-
-
-	/**
-	 * This private function calculating function value at point x for a giving Node temp.
-	 * @param temp - requested Node
-	 * @param x - double 
-	 * @return sum - stabilizes the function value at point x for the specific Node temp.
-	 */
-	private double calcF(Node temp,double x) {
-
-		double sum = 0;
-
-		if(temp.left!=null && temp.right==null) {
-			sum = temp.left.f(x);
-		}
-		if(temp.left==null && temp.right!=null) {
-			sum = temp.right.f(x);
-		}
-		if(temp.left!=null && temp.right!=null) {
-			 
-			double temp1 = temp.left.f(x);
-			double temp2 = temp.right.f(x);
-			switch(temp.P_op) {
-
-			case Plus: sum = temp1 + temp2;
-			break;
-			case Times: sum = temp1 * temp2;
-			break;
-			case Divid: sum = temp1 / temp2;
-			break;
-			case Min :if(temp1 > temp2) sum = temp2;
-			else sum = temp1;
-			break;
-			case Max: if(temp1 > temp2) sum = temp1;
-			else sum = temp2;
-			break;
-			case Comp: sum = temp.right.f(temp1);
-			break;
-			case None: sum = temp1;
-			break;
-
-			default: sum = 0.0;
-
-			}		
-		}
-		return sum;
 	}
 
 
@@ -626,11 +623,9 @@ public class ComplexFunction implements complex_function{
 			}
 
 			Polynom p = new Polynom(s);
-			ComplexFunction cf = new ComplexFunction();
-			Node answer = new Node();
-			answer.left=p;
-			cf.PolynomList.add(answer);
-			return cf;
+			Node answer = new Node(p,Operation.None,null,Operation.None);
+			this.PolynomList.add(answer);
+			return this;
 		}
 
 		String temp = s;
@@ -693,9 +688,125 @@ public class ComplexFunction implements complex_function{
 	}
 
 
-	/////////////////////// Private Methods: /////////////////////////////
+	/**
+	 * This function prints a string of the current ComplexFunction.
+	 */
+	public String toString() {
+
+		if(this.PolynomList.isEmpty())return null;
+		String ans = "";
+
+		Iterator<Node> iter = this.iteretor();
+		Node temp = new Node();
+		temp = iter.next();
+
+		if(temp.right == null && temp.left!=null)
+			ans = temp.left.toString();
+		if(temp.left == null && temp.right!=null)
+			ans = temp.right.toString();
+		if(temp.left!=null && temp.right!=null)
+			ans = temp.P_op.toString() +"("+ temp.left.toString()+","+temp.right.toString()+")";
+
+		while(iter.hasNext()) {
+
+			Operation op = temp.G_op;
+			temp = iter.next();
+
+			if(temp.right == null)
+				ans = op.toString() +"("+ temp.left.toString()+","+ans+")";
+
+			if(temp.left == null)
+				ans = op.toString() +"("+ans+","+ temp.right.toString()+")";
+
+			if(temp.left!=null && temp.right!=null){
+				ans = op.toString() +
+						"("+ans+","+temp.P_op.toString()+"("+ temp.left.toString()+","
+						+temp.right.toString()+")"+")";
+			}
+		}
+		return ans;
+	}
 
 
+	/**
+	 * This is a boolean function that compare between 2 ComplexFunction,
+	 * if they are equal the function return true, else she return false. 
+	 * @param - obj is an Object
+	 */
+	public boolean equals(Object obj) {
+
+		boolean match = true;
+
+		if(obj instanceof function) {
+
+			function temp = (function)obj;
+			double[] arr = new double[100];
+
+			for(int i=0;i<arr.length;i++){
+				double randNumber = ThreadLocalRandom.current().nextDouble(-1, 1);
+				arr[i]= (double)Math.round(randNumber * 1000d)/1d;
+			}
+			int counter = 0;
+			while(counter<100 && match) {
+				if(this.f(arr[counter]) == temp.f(arr[counter]))counter++;
+				else match = false ;	
+			}
+		}
+		else match = false;
+
+		return match;	
+	}
+
+
+	// *************************************************************
+	// ****************** Private Methods and Data *****************
+	// *************************************************************
+	
+	
+	/**
+	 * This private function calculating function value at point x for a giving Node temp.
+	 * @param temp - requested Node
+	 * @param x - double 
+	 * @return sum - stabilizes the function value at point x for the specific Node temp.
+	 */
+	private double calcF(Node temp,double x) {
+
+		double sum = 0;
+
+		if(temp.left!=null && temp.right==null) {
+			sum = temp.left.f(x);
+		}
+		if(temp.left==null && temp.right!=null) {
+			sum = temp.right.f(x);
+		}
+		if(temp.left!=null && temp.right!=null) {
+			 
+			double temp1 = temp.left.f(x);
+			double temp2 = temp.right.f(x);
+			switch(temp.P_op) {
+
+			case Plus: sum = temp1 + temp2;
+			break;
+			case Times: sum = temp1 * temp2;
+			break;
+			case Divid: sum = temp1 / temp2;
+			break;
+			case Min :if(temp1 > temp2) sum = temp2;
+			else sum = temp1;
+			break;
+			case Max: if(temp1 > temp2) sum = temp1;
+			else sum = temp2;
+			break;
+			case Comp: sum = temp.right.f(temp1);
+			break;
+			default: sum = 0.0;
+
+			}		
+		}
+		return sum;
+	}
+	
+	
 	/**
 	 * This function return an iterator that represent: this.PolynomList.iterator();
 	 * @return Iterator
@@ -772,33 +883,7 @@ public class ComplexFunction implements complex_function{
 
 		return Column_Index;
 	}
-
-
-	/**
-	 * This function set the operation op from a given string.
-	 * @param str - a String that represent a ComplexFunction.
-	 */
-	private void get_operator(String str){ 
-
-		switch(str) {
-		case "plus": op = Operation.Plus;
-		break;
-		case "mul": op = Operation.Times;
-		break;
-		case  "div": op = Operation.Divid;
-		break;
-		case "min" :op = Operation.Min;
-		break;
-		case "max":op = Operation.Max;
-		break;
-		case "comp":op = Operation.Comp;
-		break;
-		case "none":op = Operation.None;
-		break;
-		default: op = Operation.Error;
-		}
-	}
-
+	
 
 	/**
 	 * This function return an operation witch found before the open character '('
@@ -915,71 +1000,35 @@ public class ComplexFunction implements complex_function{
 		return flag;
 	}
 
-
+	
 	/**
-	 * This function prints a string of the current ComplexFunction.
+	 * This function set the operation op from a given string.
+	 * @param str - a String that represent a ComplexFunction.
 	 */
-	public String toString() {
+	private Operation get_operator(String str){ 
 
-		if(this.PolynomList.isEmpty())return null;
-		String ans = "";
-
-		Iterator<Node> iter = this.iteretor();
-		Node temp = new Node();
-		temp = iter.next();
-
-		ans = temp.P_op.toString() +"("+ temp.left.toString()+","+temp.right.toString()+")";
-
-		while(iter.hasNext()) {
-
-			Operation op = temp.G_op;
-			temp = iter.next();
-
-			if(temp.right == null)
-				ans = op.toString() +"("+ temp.left.toString()+","+ans+")";
-
-			if(temp.left == null)
-				ans = op.toString() +"("+ans+","+ temp.right.toString()+")";
-
-			if(temp.left!=null && temp.right!=null){
-				ans = op.toString() +
-						"("+ans+","+temp.P_op.toString()+"("+ temp.left.toString()+","
-						+temp.right.toString()+")"+")";
-			}
+		Operation tempOp ;
+		
+		switch(str) {
+		case "plus": tempOp = Operation.Plus;
+		break;
+		case "mul": tempOp = Operation.Times;
+		break;
+		case  "div": tempOp = Operation.Divid;
+		break;
+		case "min" :tempOp = Operation.Min;
+		break;
+		case "max":tempOp = Operation.Max;
+		break;
+		case "comp":tempOp = Operation.Comp;
+		break;
+		case "none":tempOp = Operation.None;
+		break;
+		default: tempOp = Operation.Error;
 		}
-		return ans;
+		return tempOp;
 	}
-
-
-	/**
-	 * This is a boolean function that compare between 2 ComplexFunction,
-	 * if they are equal the function return true, else she return false. 
-	 * @param - obj is an Object
-	 */
-	public boolean equals(Object obj) {
-
-		boolean match = true;
-
-		if(obj instanceof function) {
-
-			function temp = (function)obj;
-			double[] arr = new double[100];
-
-			for(int i=0;i<arr.length;i++){
-				double randNumber = ThreadLocalRandom.current().nextDouble(-1, 1);
-				arr[i]=randNumber * 100;
-			}
-			int counter = 0;
-			while(counter<100 && match) {
-				if(this.f(arr[counter]) == temp.f(arr[counter]))counter++;
-				else match = false;			
-			}
-		}
-		else match = false;
-
-		return match;	
-	}
-
+	
 
 	/**
 	 * This is a function return the length of a specific Operation.
@@ -1010,12 +1059,12 @@ public class ComplexFunction implements complex_function{
 	private ArrayList<Node> ArrayListCopy(ComplexFunction cf){
 
 		ArrayList<Node> copy =  new ArrayList<Node>();
-
+		Node temp = new Node();
 		Iterator<Node> iter = cf.iteretor();
+		
 		while(iter.hasNext()) {
-			Node temp = new Node();
 			temp=iter.next().copy();
-			copy.add(iter.next());
+			copy.add(temp);
 		}
 		return copy;
 	}

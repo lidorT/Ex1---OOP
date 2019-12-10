@@ -14,21 +14,25 @@ import myMath.Monom;
  */
 
 public class Polynom implements Polynom_able {
+	
+	private static final long serialVersionUID = 1L;
+
+
 	/**
 	 * Monoms_List is an arrayList of Monoms in order to storage for each Polynom his monoms.
 	 */
 	private ArrayList<Monom> Monoms_List = new ArrayList<>(); 
+	
+	
 	/**
 	 * cmp is a Monom comperator to ease the sort and for future use.
 	 */
-	private Monom_Comperator cmp = new Monom_Comperator();    // 
+	private Monom_Comperator cmp = new Monom_Comperator();  
+	
 
 	/**
 	 * Deafult constractor that builds Zero polynom.
 	 */
-	
-
-	
 	public Polynom() {
 		this.Monoms_List.add(new Monom(0, 0));
 		
@@ -49,8 +53,6 @@ public class Polynom implements Polynom_able {
 	}
 	
 	
-	
-	
 	/**
 	 * Init a Polynom from a String such as: {"x", "3+1.4x^3-34x","3x^3+2x-5"}.
 	 * This constructor runs on the string and save each monom, we know to divide them when we find the characters "-" or "+".
@@ -58,8 +60,10 @@ public class Polynom implements Polynom_able {
 	 * Then we send each index to the monom constructor and storage them inside the polynom's ArrayList of Monoms(Monom_list).
 	 * @param s - a string represents a Polynom. 
 	 */
-
 	public Polynom(String s) {
+		
+		s = s.toLowerCase();
+		s=clear_spaces(s);
 
 		String[] arr = new String[s.length()]; 
 		int i = 0, j = 0, k = 0;
@@ -99,6 +103,7 @@ public class Polynom implements Polynom_able {
 
 	}
 
+	
 	/**
 	 * This function calculate the value of f(x) by giving x.
 	 * @param X - the value the user enters and wants to retrieve the function value at this point.
@@ -113,6 +118,7 @@ public class Polynom implements Polynom_able {
 		return ans;
 	}
 
+	
 	/**
 	 * This function calculating the sum of two polynoms and combine them into the current polynom.
 	 * This function receives an object of the type Polynom_able and combine it with the current polynom.
@@ -126,6 +132,7 @@ public class Polynom implements Polynom_able {
 		}
 	}
 
+	
 	/**
 	 * This Function allows us to add a Monom to our current Polynom
 	 *   @param m1 -  the Monom that we want to add to this Polynom         
@@ -151,18 +158,23 @@ public class Polynom implements Polynom_able {
 		}
 	}
 
+	
 	/**
 	 * This function gets polynom_able from the user that will be subtract it of the current Polynom.
 	 * @param p1 - user's polynom_able input.
 	 */
 	public void substract(Polynom_able p1) {
-		Iterator<Monom> iterMonom = p1.iteretor();
+		
+		Polynom p = new Polynom();
+		p = (Polynom)p1.copy();
+		Iterator<Monom> iterMonom = p.iteretor();
 
 		while (iterMonom.hasNext()) {
 			Monom m1 = iterMonom.next();
 			this.substract(m1);
 		}
 	}
+	
 	
 	/**
 	 * This function subtract the given Monom from the current Polynom using the add funcion of the given Monom*-1 .
@@ -174,6 +186,7 @@ public class Polynom implements Polynom_able {
 		if(this.Monoms_List.isEmpty())this.Monoms_List.add(Monom.ZERO);
 	}
 
+	
 	/**
 	 * This function receives a Polynom_able and multiply it with the current
 	 * polynom. we first check if one of the given polynoms is equal to zero, if
@@ -204,6 +217,7 @@ public class Polynom implements Polynom_able {
 			this.Monoms_List = p.Monoms_List;
 		}
 	}
+	
 
 	/**
 	 * This function compares a given Polynom_able to the current Polynom and returns true if they are equals else return false.
@@ -233,6 +247,7 @@ public class Polynom implements Polynom_able {
 		}
 		return flag;
 	}
+	
 
 	/**
 	 * This function checks if the current Polynom is a Zero Polynom.
@@ -241,6 +256,7 @@ public class Polynom implements Polynom_able {
 		Iterator<Monom> poly = this.iteretor();
 		return (poly.next().get_coefficient() == 0);
 	}
+	
 
 	/** 
 	 * This function calculate the root of a polynom
@@ -267,6 +283,7 @@ public class Polynom implements Polynom_able {
 		        }
 		        return c;
 		    }
+	
 
 	/**
 	 * This function performs a deep copy of a given Polynom and transform it to a Polynom_able.
@@ -302,6 +319,7 @@ public class Polynom implements Polynom_able {
 		}
 		return p1;
 	}
+	
 
 	/**
 	 * This method calculate the area of a given polynom using the Riemann's integral from x0 to x1 in eps steps.
@@ -327,6 +345,7 @@ public class Polynom implements Polynom_able {
 		}
 		return Math.abs(sum);
 	}
+	
 
 	/**
 	 * an Iterator of Monoms to run over the current Polynom.
@@ -334,6 +353,7 @@ public class Polynom implements Polynom_able {
 	public Iterator<Monom> iteretor() {
 		return this.Monoms_List.iterator();
 	}
+	
 
 	/**This function gets a monom and multiply it with the current Polynom.
 	 * @param m1 - a given Monom which will multiply with the current Polynom.
@@ -348,15 +368,6 @@ public class Polynom implements Polynom_able {
 			m.multiply(m1);
 		}
 	}
-	
-//	public function initFromString(String s){
-//		
-//		
-//		
-//		
-//	}
-	
-	
 	
 
 	/**
@@ -381,6 +392,20 @@ public class Polynom implements Polynom_able {
 		if (ans.charAt(0) == '+')
 			ans = ans.substring(1);
 		return ans;
+	}
+	
+	
+	/**
+	 * This function gets a string and returns it without spaces 
+	 * for example:
+	 * input : "3x^2 + 6x^3"
+	 * output: "3x^2+6x^3"
+	 * @param s - a String that represent a ComplexFunction.
+	 * @return s - a String without spaces that represent a ComplexFunction.
+	 */
+	private String clear_spaces(String s) {
+		s=s.replaceAll(" ","");
+		return s;
 	}
 	
 }
