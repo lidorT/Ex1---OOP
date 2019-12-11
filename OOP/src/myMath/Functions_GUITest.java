@@ -1,7 +1,10 @@
 package myMath;
 
+import static org.junit.Assert.*;
+import java.io.IOException;
 import java.util.Iterator;
 import org.junit.Before;
+import org.junit.Test;
 import myMath.ComplexFunction;
 import myMath.Functions_GUI;
 import myMath.Monom;
@@ -24,7 +27,8 @@ import myMath.functions;
  * @author Lidor_t and Zohar_m
  */
 
-class Functions_GUITest {
+	public class Functions_GUITest {
+	
 	public static void main(String[] a) {
 		
 		functions data = FunctionsFactory();
@@ -32,65 +36,131 @@ class Functions_GUITest {
 		Range rx = new Range(-10,10);
 		Range ry = new Range(-5,15);
 		data.drawFunctions(w,h,rx,ry,res);
-		
-		
-//		String file = "function_file.txt";
-//		String file2 = "function_file2.txt";
-//		try {
-//			data.saveToFile(file);
-//			Functions_GUI data2 = new Functions_GUI();
-//			data2.initFromFile(file);
-//			data.saveToFile(file2);
-//		}
-//		catch(Exception e) {e.printStackTrace();}
-//		
-//		String JSON_param_file = "GUI_params.txt";
-//		data.drawFunctions(JSON_param_file);
-//		
-//		
-		
-		
-		
-	}
+		String file = "function_file.txt";
+		String file2 = "function_file2.txt";
 	
-	private functions _data=null;
-	
-	//@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}
+		try {
+			data.saveToFile(file);
+			Functions_GUI data2 = new Functions_GUI();
+			data2.initFromFile(file);
+			data.saveToFile(file2);
+		}
+		catch(Exception e) {e.printStackTrace();}
 
+		String JSON_param_file = "GUI_params.txt";
+		data.drawFunctions(JSON_param_file);
+	}
+		
+		
+	private functions _data = null;
+	
 	@Before
-	void setUp() throws Exception {
+	public void setUp() throws Exception {
 		_data = FunctionsFactory();
 	}
 
-	//@Test
-	void testFunctions_GUI() {
-	//	fail("Not yet implemented");
-	}
-
-	//@Test
-	void testInitFromFile() {
-	//	fail("Not yet implemented");
-	}
-
-	//@Test
-	void testSaveToFile() {
+	@Test
+	public void Functions_GUI() {
 		
+		Functions_GUI fg = new Functions_GUI();
 		
+		Monom m = new Monom("2x");
+		Polynom p1 = new Polynom("2x^2+6");
+		Polynom p2 = new Polynom("x^3+2x+19");
+		Polynom p3 = new Polynom("x^3+2x^2+x+3");
+		Operation op = Operation.Plus;
+		ComplexFunction cf1 = new ComplexFunction(p1,op,p2);
+		ComplexFunction cf2 = new ComplexFunction(p3);
+		
+		fg.add(new Polynom("x^2+34-2"));
+		fg.add(m);
+		fg.add(p1);
+		fg.add(p2);
+		fg.add(cf1);
+		fg.add(cf2);
 	}
 
-	//@Test
-	void testDrawFunctions() {
-		//_data.drawFunctions();
-	//	fail("Not yet implemented");
+	@Test
+	public void InitFromFile() throws IOException {
+		
+		Functions_GUI fg1 = new Functions_GUI();
+		Functions_GUI fg2 = new Functions_GUI();
+		try {
+			fg1.initFromFile("initfromfile.txt");
+			fg2.initFromFile("initfromfile.txt");
+			assertTrue(fg1.containsAll(fg2));
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	//@Test
-	void testDrawFunctionsIntIntRangeRangeInt() {
+	@Test
+	public void SaveToFile()throws IOException {
+		
+		Functions_GUI fg1 = new Functions_GUI();
+		
+		fg1.add(new Polynom("3x^2+5x+9"));
+		fg1.add(new Monom("8x"));
+		fg1.add(new ComplexFunction("plus(6x^2+4x+2,4x)"));
+		
+		fg1.saveToFile("SaveToFile.txt");
+	}
+	
+	
+	@Test
+	public void SaveToAndInitFromFile()throws IOException {
+		
+		Functions_GUI fg1 = new Functions_GUI();
+		
+		Monom m = new Monom("2x");
+		Polynom p1 = new Polynom("2x^2+6");
+		Polynom p2 = new Polynom("x^3+2x+19");
+		Polynom p3 = new Polynom("x^3+2x^2+x+3");
+		Operation op = Operation.Plus;
+		ComplexFunction cf1 = new ComplexFunction(p1,op,p2);
+		ComplexFunction cf2 = new ComplexFunction(p3);
+		
+		fg1.add(m);
+		fg1.add(p1);
+		fg1.add(p2);
+		fg1.add(cf1);
+		fg1.add(cf2);
+		
+		fg1.saveToFile("SaveToAndInitFromFile.txt");
+		Functions_GUI copyFromFile = new Functions_GUI();
+		copyFromFile.initFromFile("SaveToAndInitFromFile.txt");
+		assertTrue(copyFromFile.equals(fg1));
+		
+		Functions_GUI fg2 = new Functions_GUI();
+		fg2.initFromFile("initfromfile2.txt");
+		assertEquals(fg1.toString(), fg2.toString());
+	}
+	
+	
+	@Test
+	public void Equals() {
+		
+		functions fg = FunctionsFactory();
+		assertTrue(_data.equals(fg));
+		fg.add(new Polynom("2x^2+6"));
+		assertFalse(_data.equals(fg));
+	}
+
+	@Test
+	public void DrawFunctions() {
+		
+		Range rx = new Range(-10, 10);
+		Range ry = new Range(-10, 10);
+		_data.drawFunctions(1000, 600, rx, ry, 200);
+	}
+
+	@Test
+	public void DrawFunctionsJSON() {
 		_data.drawFunctions("GUI_params.txt");
-		//fail("Not yet implemented");
 	}
+	
+	
 	
 	public static functions FunctionsFactory() {
 		
@@ -105,7 +175,7 @@ class Functions_GUITest {
 		for(int i=1;i<s3.length;i++) {
 			cf3.mul(new Polynom(s3[i]));
 		}
-		
+
 		ComplexFunction cf = new ComplexFunction(p1,Operation.Plus,p2);
 		ComplexFunction cf4 = new ComplexFunction("div", new Polynom("x +1"),cf3);
 		cf4.plus(new Monom("2"));
@@ -114,7 +184,6 @@ class Functions_GUITest {
 		cf.div(p1);
 		ans.add(cf.copy());
 		String s = cf.toString();
-		System.out.println(s);
 		function cf5 = cf4.initFromString(s1);
 		function cf6 = cf4.initFromString(s2);
 		ans.add(cf5.copy());
@@ -129,7 +198,9 @@ class Functions_GUITest {
 			min.min(f);
 		}
 		ans.add(max);
-		ans.add(min);		
+		ans.add(min);
 		return ans;
 	}
+	
+	
 }
