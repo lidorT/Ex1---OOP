@@ -31,3 +31,5 @@ for example a string initialize of a Complex Function: " div(plus(-1.0x^4 +2.4x^
 * Using this project will grant you the ability to even print a Complex Function to a plot.
 
 example of the plot :
+
+![ExampleOfPlot](https://media.giphy.com/media/U2F9HnI1Xqy2ypJaOb/giphy.gif)
