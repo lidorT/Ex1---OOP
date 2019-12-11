@@ -4,24 +4,23 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ComplexFunction implements complex_function{
 
-
-	/*This class represents a Node that will hold each leave on the binary tree
-	 * Operation op created in order to hold the ENUM arithmetic symbol.
-	 *Function created in order to hold the function itself.
-	 *for example : comlexfunction1*complexfunction2 will be represented as the next tree:	
-	 *
-	 *											*
-	 *										  /	   \
-	 *					      (left)x^3+2x  	 	    (right) - x^5+x^2
+	/**
+	 * This class represents a ComplexFunction which is a combination of number of 
+	 * Polynoms at the form of : " Operator(Polynom,Polynom) ".
+	 * ComplexFunction is able to hold n Polynoms and n/2 Operators at the form of:
+	 * Operator(Operator(Polynom,Polynom),Operator(Polynom,Polynom)) for example.
+	 * This class supports number of mathematical methods such as:
+	 * multiply,divide,plus and more.
+	 * The data structure we used to hold the information is at the form of
+	 * an array list that holds nodes, each nodes has one or two Polynoms ,
+	 * the operator between the two Polynoms and the operator between each node.
+	 * Each ComplexFunction has fields named left and right to represent the 
+	 * formula inside the parenthesis.
+	 * Each ComplexFunction has a field named op that holds the operator between two
+	 * ComplexFunction.
+	 * @author Lidor_T and Zohar_M
 	 */
 
-	/*
-	 * An array list to represent the complex function.
-	 * at first we create 2 nodes.
-	 * first node hold the left function(f1) and the operator between the two functions
-	 * second node will hold the right function (f2)
-	 * after that we store the nodes in the complex function array list.
-	 */
 	public function left,right;
 	public Operation op;
 	public ArrayList<Node> PolynomList = new ArrayList<>(); 
@@ -34,7 +33,6 @@ public class ComplexFunction implements complex_function{
 	 * Each Node has a field named left and right to hold two Polynoms.
 	 * Each Node has a field named P_op in order to hold the operation between the two Polynoms.
 	 * Each Node has a field named G_op in order to hold the operation between two Nodes and chain all into 1
-	 * @author Lidor and Zohar
 	 */
 	class Node {
 
@@ -60,7 +58,7 @@ public class ComplexFunction implements complex_function{
 		private void setG_op(Operation op) {
 			this.G_op = op;
 		}
-	
+
 		private Node copy() {
 			Node temp = new Node(this.left,this.P_op,this.right,this.G_op);
 			return temp;
@@ -73,7 +71,6 @@ public class ComplexFunction implements complex_function{
 	 * Default contractor.
 	 */
 	public ComplexFunction(){
-
 		this.PolynomList = new ArrayList<Node>();
 	}
 
@@ -97,43 +94,85 @@ public class ComplexFunction implements complex_function{
 	 * @param f2 - function f2
 	 */
 	public ComplexFunction(function f1,Operation op, function f2){
-		
-		if(op == Operation.None){
-			throw new RuntimeException("Error, operation could not be None");
-		}
 
+		if(op == Operation.None){
+			throw new RuntimeException("Error, operation could not be None between 2 functions.");
+		}
+		
+		if (f1 instanceof Monom && f2 instanceof Monom) {
+			
+			Polynom p1 = new Polynom(f1.toString());
+			Polynom p2 = new Polynom(f2.toString());
+			Node temp = new Node(p1,op,p2,Operation.None);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+		
+		if (f1 instanceof Monom && f2 instanceof Polynom) {
+			
+			Polynom p1 = new Polynom(f1.toString());
+			Node temp = new Node(p1,op,(Polynom)f2,Operation.None);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+		
+		if (f1 instanceof Polynom && f2 instanceof Monom) {
+			
+			Polynom p1 = new Polynom(f2.toString());
+			Node temp = new Node((Polynom)f1,op,p1,Operation.None);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+		
 		if (f1 instanceof Polynom && f2 instanceof Polynom) {
 			Node temp = new Node((Polynom)f1,op,(Polynom)f2,Operation.None);
 			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
 		}
 
 		if (f1 instanceof ComplexFunction && f2 instanceof ComplexFunction) {
 
 			ArrayList<Node> f1List = new ArrayList<Node>();
-			f1List=ArrayListCopy((ComplexFunction)f1);
+			f1List = ArrayListCopy((ComplexFunction)f1);
 			ArrayList<Node> f2List = new ArrayList<Node>();
-			f2List=ArrayListCopy((ComplexFunction)f2);
-			int counter=f1List.size();
+			f2List = ArrayListCopy((ComplexFunction)f2);
+
+			int counter = f1List.size();
 			Node Pointer = new Node();
 			Iterator <Node> iter1 = f1List.iterator();
 
-			while (iter1.hasNext()) {
-				this.PolynomList.add(iter1.next());
 
-				if (counter ==1) {
-					Pointer=iter1.next();
-					Pointer.G_op=op;
+			if (counter == 1) {
+				Pointer = iter1.next();
+				Pointer.G_op = op;
+				this.PolynomList.add(Pointer);
+			}
+			else{
+				while (iter1.hasNext()) {
+					Pointer = iter1.next();
+					if(counter == 1) {
+						Pointer.G_op = op;
+					}
+					this.PolynomList.add(Pointer);
+					counter--;
 				}
-				iter1.next();
-				counter--;
 			}
 
 			Iterator <Node> iter2 = f2List.iterator();
 			while (iter2.hasNext()) {
 				this.PolynomList.add(iter2.next());
-				iter1.next();
-
 			}
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
 		}
 
 		if (f1 instanceof Polynom && f2 instanceof ComplexFunction ) {
@@ -146,8 +185,10 @@ public class ComplexFunction implements complex_function{
 			Iterator <Node> iter2 = f2List.iterator();
 			while (iter2.hasNext()) {
 				this.PolynomList.add(iter2.next());
-				iter2.next();
 			}
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
 		}
 
 		if (f1 instanceof ComplexFunction && f2 instanceof Polynom ) {
@@ -160,17 +201,25 @@ public class ComplexFunction implements complex_function{
 			Iterator <Node> iter1 = f1List.iterator();
 			Node Pointer = new Node();
 
-			while (iter1.hasNext()) {
-				this.PolynomList.add(iter1.next());
-				if(counter==1) {
-					Pointer=iter1.next();
-					Pointer.G_op=op;
+			if (counter == 1) {
+				Pointer = iter1.next();
+				this.PolynomList.add(Pointer);
+			}
+			else{
+				while (iter1.hasNext()) {
+					Pointer = iter1.next();
+					if(counter == 1) {
+						Pointer.G_op = op;
+					}
+					this.PolynomList.add(Pointer);
+					counter--;
 				}
-				iter1.next();
-				counter--;
 			}
 			Node temp = new Node((Polynom)f2,Operation.None,null,Operation.None);
 			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
 		}
 	}
 
@@ -183,12 +232,48 @@ public class ComplexFunction implements complex_function{
 	 */
 	public ComplexFunction(String operator, function f1, function f2) {
 
-		int z = operator.length();
 		Operation tempOp = get_operator(operator);
+		if(tempOp == Operation.None){
+			throw new RuntimeException("Error, operation could not be None between 2 functions.");
+		}
+		
+		if (f1 instanceof Monom && f2 instanceof Monom) {
+			
+			Polynom p1 = new Polynom(f1.toString());
+			Polynom p2 = new Polynom(f2.toString());
+			Node temp = new Node(p1,tempOp,p2,Operation.None);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+		
+		if (f1 instanceof Monom && f2 instanceof Polynom) {
+			
+			Polynom p1 = new Polynom(f1.toString());
+			Node temp = new Node(p1,tempOp,(Polynom)f2,Operation.None);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+		
+		if (f1 instanceof Polynom && f2 instanceof Monom) {
+			
+			Polynom p1 = new Polynom(f2.toString());
+			Node temp = new Node((Polynom)f1,tempOp,p1,Operation.None);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
 
 		if (f1 instanceof Polynom && f2 instanceof Polynom) {
 			Node temp = new Node((Polynom)f1,tempOp,(Polynom)f2,Operation.None);
 			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
 		}
 
 		if (f1 instanceof ComplexFunction && f2 instanceof ComplexFunction) {
@@ -199,25 +284,34 @@ public class ComplexFunction implements complex_function{
 			f2List=ArrayListCopy((ComplexFunction)f2);
 
 			int counter=f1List.size();
-			Node Pointer = new Node();
+			Node Pointer1 = new Node();
 			Iterator <Node> iter1 = f1List.iterator();
 
-			while (iter1.hasNext()) {
-				this.PolynomList.add(iter1.next());
-
-				if (counter ==1) {
-					Pointer=iter1.next();
-					Pointer.G_op=tempOp;
+			if (counter == 1) {
+				Pointer1 = iter1.next();
+				Pointer1.G_op = tempOp;
+				this.PolynomList.add(Pointer1);
+			}
+			else{
+				while (iter1.hasNext()) {
+					Pointer1 = iter1.next();
+					if(counter == 1) {
+						Pointer1.G_op = tempOp;
+					}
+					this.PolynomList.add(Pointer1);
+					counter--;
 				}
-				iter1.next();
-				counter--;
 			}
 
 			Iterator <Node> iter2 = f2List.iterator();
+			Node Pointer2 = new Node();
 			while (iter2.hasNext()) {
-				this.PolynomList.add(iter2.next());
-				iter1.next();
+				Pointer2 = iter2.next();
+				this.PolynomList.add(Pointer2);
 			}
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
 		}
 
 
@@ -233,27 +327,31 @@ public class ComplexFunction implements complex_function{
 			Iterator <Node> iter2 = f2List.iterator();
 			while (iter2.hasNext()) {
 				this.PolynomList.add(iter2.next());
-				//iter2.next();
 			}
 		}
 
 		if (f1 instanceof ComplexFunction && f2 instanceof Polynom ) {
 
 			ArrayList<Node> f1List = new ArrayList<Node>();
-			f1List=ArrayListCopy((ComplexFunction)f1);
+			f1List = ArrayListCopy((ComplexFunction)f1);
 
-			int counter=f1List.size();
+			int counter = f1List.size();
 			Iterator <Node> iter1 = f1List.iterator();
 			Node Pointer = new Node();
 
-			while (iter1.hasNext()) {
-				this.PolynomList.add(iter1.next());
-				if(counter==1) {
-					Pointer=iter1.next();
-					Pointer.G_op=tempOp;
+			if (counter == 1) {
+				Pointer = iter1.next();
+				this.PolynomList.add(Pointer);
+			}
+			else{
+				while (iter1.hasNext()) {
+					Pointer = iter1.next();
+					if(counter == 1) {
+						Pointer.G_op = op;
+					}
+					this.PolynomList.add(Pointer);
+					counter--;
 				}
-				iter1.next();
-				counter--;
 			}
 			Node temp = new Node((Polynom)f2,Operation.None,null,Operation.None);
 			this.PolynomList.add(temp);
@@ -268,30 +366,39 @@ public class ComplexFunction implements complex_function{
 	 */
 	public ComplexFunction(function f,Operation op){
 
-		if (f instanceof Polynom) {
-			Node temp = new Node((Polynom) f,Operation.None,null,op);
+		if (f instanceof Monom) {
+
+			Polynom p = new Polynom(f.toString());
+			Node temp = new Node(p,Operation.None,null,Operation.None);
 			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+		
+		if (f instanceof Polynom) {
+			Node temp = new Node((Polynom) f,Operation.None,null,Operation.None);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
 		}
 
 		if (f instanceof ComplexFunction) {
 
 			ArrayList<Node> f1List = new ArrayList<Node>();
 			f1List=ArrayListCopy((ComplexFunction)f);
-
-			int counter=f1List.size();
 			Node Pointer = new Node();
 			Iterator <Node> iter1 = f1List.iterator();
 
 			while (iter1.hasNext()) {
-
-				this.PolynomList.add(iter1.next());
-				if (counter ==1) {
-					Pointer=iter1.next();
-					Pointer.G_op=op;
-				}
-				iter1.next();
-				counter--;
+				Pointer=iter1.next();
+				this.PolynomList.add(Pointer);
 			}
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+			
 		}
 	}
 
@@ -302,10 +409,23 @@ public class ComplexFunction implements complex_function{
 
 
 	public ComplexFunction(function f) {
-		
-		if (f instanceof Polynom || f instanceof Monom ) {
+
+		if (f instanceof Monom) {
+
+			Polynom p = new Polynom(f.toString());
+			Node temp = new Node(p,Operation.None,null,Operation.None);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+
+		if (f instanceof Polynom) {
 			Node temp = new Node((Polynom) f,Operation.None,null,Operation.None);
 			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
 		}
 
 		if (f instanceof ComplexFunction){
@@ -319,6 +439,9 @@ public class ComplexFunction implements complex_function{
 				Pointer=iter1.next();
 				this.PolynomList.add(Pointer);
 			}
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
 		}
 	}
 
@@ -328,6 +451,18 @@ public class ComplexFunction implements complex_function{
 	 * @param f1 the complex_function which will be added to this complex_function.
 	 */
 	public void plus(function f1) {
+
+		if (f1 instanceof Monom) {
+
+			Polynom p = new Polynom(f1.toString());
+			Node temp = new Node(p,Operation.None,null,Operation.None);
+			this.PolynomList.get(this.PolynomList.size()-1).setG_op(Operation.Plus);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+
 
 		if (f1 instanceof Polynom) {
 
@@ -355,6 +490,17 @@ public class ComplexFunction implements complex_function{
 	 */
 	public void mul(function f1) {
 
+		if (f1 instanceof Monom) {
+
+			Polynom p = new Polynom(f1.toString());
+			Node temp = new Node(p,Operation.None,null,Operation.None);
+			this.PolynomList.get(this.PolynomList.size()-1).setG_op(Operation.Times);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+
 		if (f1 instanceof Polynom) {
 
 			Node temp = new Node((Polynom) f1,Operation.None,null,Operation.None);
@@ -381,11 +527,25 @@ public class ComplexFunction implements complex_function{
 	 */
 	public void div(function f1) {
 
+		if (f1 instanceof Monom) {
+
+			Polynom p = new Polynom(f1.toString());
+			Node temp = new Node(p,Operation.None,null,Operation.None);
+			this.PolynomList.get(this.PolynomList.size()-1).setG_op(Operation.Divid);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+
 		if (f1 instanceof Polynom) {
 
 			Node temp = new Node((Polynom) f1,Operation.None,null,Operation.None);
 			this.PolynomList.get(this.PolynomList.size()-1).setG_op(Operation.Divid);
 			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
 		}
 
 		if (f1 instanceof ComplexFunction) {
@@ -403,6 +563,17 @@ public class ComplexFunction implements complex_function{
 	 * @param f1 the complex_function which will be compared with this complex_function - to compute the maximum.
 	 */
 	public void max(function f1) {
+
+		if (f1 instanceof Monom) {
+
+			Polynom p = new Polynom(f1.toString());
+			Node temp = new Node(p,Operation.None,null,Operation.None);
+			this.PolynomList.get(this.PolynomList.size()-1).setG_op(Operation.Max);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
 
 		if (f1 instanceof Polynom) {
 
@@ -430,6 +601,17 @@ public class ComplexFunction implements complex_function{
 	 */
 	public void min(function f1) {
 
+		if (f1 instanceof Monom) {
+
+			Polynom p = new Polynom(f1.toString());
+			Node temp = new Node(p,Operation.None,null,Operation.None);
+			this.PolynomList.get(this.PolynomList.size()-1).setG_op(Operation.Min);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+
 		if (f1 instanceof Polynom) {
 
 			Node temp = new Node((Polynom) f1,Operation.None,null,Operation.None);
@@ -455,6 +637,18 @@ public class ComplexFunction implements complex_function{
 	 * @param f1 complex function
 	 */
 	public void comp(function f1) {
+
+		if (f1 instanceof Monom) {
+
+			Polynom p = new Polynom(f1.toString());
+			Node temp = new Node(p,Operation.None,null,Operation.None);
+			this.PolynomList.get(this.PolynomList.size()-1).setG_op(Operation.Comp);
+			this.PolynomList.add(temp);
+			this.left = this.left();
+			this.right = this.right();
+			this.op = this.getOp();
+		}
+
 		if (f1 instanceof Polynom) {
 
 			Node temp = new Node((Polynom) f1,Operation.None,null,Operation.None);
@@ -485,14 +679,21 @@ public class ComplexFunction implements complex_function{
 		int counter=this.PolynomList.size();
 		Iterator <Node> iter1 = this.iteretor();
 		Node tempN = new Node();
-		while (iter1.hasNext()) {
 
-			if (counter ==1) {
-				break;
-			}
+		if (counter == 1) {
 			tempN = iter1.next();
 			temp.PolynomList.add(tempN);
-			counter--;
+		}
+		else{
+			while (iter1.hasNext()) {
+
+				if (counter ==1) {
+					break;
+				}
+				tempN = iter1.next();
+				temp.PolynomList.add(tempN);
+				counter--;
+			}
 		}
 		return temp;
 	}
@@ -538,68 +739,8 @@ public class ComplexFunction implements complex_function{
 			Node tempNode = new Node();
 			tempNode=iter1.next().copy();
 			temp.PolynomList.add(tempNode);
-			//iter1.next();
 		}
 		return temp;
-	}
-
-
-	/**
-	 * This function calculate this ComplexFunction for the requested number x.
-	 * @param x - the requested number that we want to calculate ComplexFunction(x).
-	 * @return sum - stabilizes the function value at point x.
-	 */
-	public double f(double x) {
-		
-		int counter = 0;
-		double sum = 0.0;
-		Node temp = new Node();
-		Operation tempOp = Operation.None;
-		Iterator<Node> iter = this.PolynomList.iterator();
-		if(iter.hasNext()) {
-			temp=iter.next();
-			tempOp = temp.G_op;
-			sum = calcF(temp,x);
-			counter++;
-		}
-		if(this.PolynomList.size()>1){
-			while(iter.hasNext()) {
-
-				temp=iter.next();
-				switch(tempOp) {
-
-				case Plus: sum += calcF(temp,x);
-				break;
-				case Times: sum *= calcF(temp,x);
-				break;
-				case  Divid: 
-					if(!DivQ.isEmpty()){
-						if(DivQ.peek()==counter){
-						sum = 1/sum;
-						double tempcalc = 1/(calcF(temp,x));
-						sum = sum/tempcalc;
-						DivQ.poll();
-						DivQ.add(counter);
-						}
-					}	
-				else{ 
-					sum /= calcF(temp,x);
-				}
-				break;
-				case Min :if(sum > calcF(temp,x)) sum = calcF(temp,x);
-				break;
-				case Max: if(sum < calcF(temp,x)) sum = calcF(temp,x);
-				break;
-				case Comp: sum = calcF(temp,sum);
-				break;
-				case None:break;
-				default: op = Operation.Error;
-
-				}
-				tempOp = temp.G_op;
-			}
-		}
-		return sum;	
 	}
 
 
@@ -640,20 +781,23 @@ public class ComplexFunction implements complex_function{
 
 			if(Case == 1){
 
-				tempOp = get_op(start,s);
+				tempOp = get_op(start,temp);
 				String s1 = temp.substring(start+1,column);
 				String s2 = temp.substring(column+1,end);
 				Polynom p1 = new Polynom(s1);
 				Polynom p2 = new Polynom(s2);
-
+				//				int open = Open_Index(start, temp);
+				//				int length = get_op_length(open,temp);
+				//				if(temp.charAt(start-length-1) == '('){
+				//					this.PolynomList.get(this.PolynomList.size()-1).setG_op(get_op(open,temp));
+				//				}
 				Node tempNodeC = new Node(p1, tempOp, p2, Operation.None);
 				this.PolynomList.add(tempNodeC);
-
 			}	
 
 			if(Case == 2){
 
-				tempOp = get_op(start,s); 
+				tempOp = get_op(start,temp); 
 				String s1 = temp.substring(column+1,end);
 				Polynom p = new Polynom(s1);
 
@@ -664,7 +808,7 @@ public class ComplexFunction implements complex_function{
 
 			if(Case == 3){
 
-				tempOp = get_op(start,s); 
+				tempOp = get_op(start,temp); 
 				String s1 = temp.substring(start+1,column);
 				Polynom p = new Polynom(s1);
 				this.PolynomList.get(this.PolynomList.size()-1).setG_op(tempOp);
@@ -676,6 +820,7 @@ public class ComplexFunction implements complex_function{
 					this.DivQ.add(this.PolynomList.size()-1);
 				}
 			}
+
 			int length = get_op_length(start,temp);
 			temp = temp.substring(0, start-length) + temp.substring(end+1);
 
@@ -685,6 +830,68 @@ public class ComplexFunction implements complex_function{
 		this.op = this.getOp();
 
 		return this;
+	}
+
+
+	/**
+	 * This function calculate this ComplexFunction for the requested number x.
+	 * @param x - the requested number that we want to calculate ComplexFunction(x).
+	 * @return sum - stabilizes the function value at point x.
+	 */
+	public double f(double x) {
+
+		int counter = 0;
+		double sum = 0.0;
+		Node temp = new Node();
+		Operation tempOp = Operation.None;
+		Iterator<Node> iter = this.PolynomList.iterator();
+		if(iter.hasNext()) {
+			temp=iter.next();
+			tempOp = temp.G_op;
+			sum = calcF(temp,x);
+			counter++;
+		}
+		if(this.PolynomList.size()>1){
+			while(iter.hasNext()) {
+
+				temp=iter.next();
+				switch(tempOp) {
+
+				case Plus: sum += calcF(temp,x);
+				break;
+				case Times: sum *= calcF(temp,x);
+				break;
+				case  Divid: 
+					if(!DivQ.isEmpty()){
+						if(DivQ.peek()==counter){
+							sum = 1/sum;
+							double tempcalc = 1/(calcF(temp,x));
+							sum = sum/tempcalc;
+							DivQ.poll();
+							DivQ.add(counter);
+						}
+					}	
+					else{ 
+						sum /= calcF(temp,x);
+					}
+					break;
+				case Min :if(sum > calcF(temp,x)) sum = calcF(temp,x);
+				break;
+				case Max: if(sum < calcF(temp,x)) sum = calcF(temp,x);
+				break;
+				case Comp: sum = calcF(temp,sum);
+				break;
+				case None:break;
+				default: op = Operation.Error;
+
+				}
+				tempOp = temp.G_op;
+			}
+		}
+		String s = Double.toString(sum);
+		s = String.format("%.5g%n",sum);
+		sum = Double.parseDouble(s);
+		return sum;	
 	}
 
 
@@ -761,8 +968,8 @@ public class ComplexFunction implements complex_function{
 	// *************************************************************
 	// ****************** Private Methods and Data *****************
 	// *************************************************************
-	
-	
+
+
 	/**
 	 * This private function calculating function value at point x for a giving Node temp.
 	 * @param temp - requested Node
@@ -780,7 +987,7 @@ public class ComplexFunction implements complex_function{
 			sum = temp.right.f(x);
 		}
 		if(temp.left!=null && temp.right!=null) {
-			 
+
 			double temp1 = temp.left.f(x);
 			double temp2 = temp.right.f(x);
 			switch(temp.P_op) {
@@ -805,8 +1012,8 @@ public class ComplexFunction implements complex_function{
 		}
 		return sum;
 	}
-	
-	
+
+
 	/**
 	 * This function return an iterator that represent: this.PolynomList.iterator();
 	 * @return Iterator
@@ -883,7 +1090,7 @@ public class ComplexFunction implements complex_function{
 
 		return Column_Index;
 	}
-	
+
 
 	/**
 	 * This function return an operation witch found before the open character '('
@@ -930,6 +1137,8 @@ public class ComplexFunction implements complex_function{
 
 		if(s1.equals("")) Case=2;
 		if(s2.equals("")) Case=3;
+		if(s1.equals("") && s2.equals("")) Case=4;
+
 
 		return Case;
 	}
@@ -987,20 +1196,20 @@ public class ComplexFunction implements complex_function{
 		Operation Op = Operation.None;
 		boolean flag= true;
 
-		for (int i=0; i<s.length();i++){
+		for (int i=0; i<s.length() && flag ;i++){
 			if (s.charAt(i) == '(') {
 				index = i;
 				Op = get_op(index, s);
 				if (Op == Operation.None){
 					flag =false;
-					return flag;
+					throw new RuntimeException("You have entered an invaild Operation input, please fix Operation None in the string.");
 				}
 			}
 		}
 		return flag;
 	}
 
-	
+
 	/**
 	 * This function set the operation op from a given string.
 	 * @param str - a String that represent a ComplexFunction.
@@ -1008,7 +1217,7 @@ public class ComplexFunction implements complex_function{
 	private Operation get_operator(String str){ 
 
 		Operation tempOp ;
-		
+
 		switch(str) {
 		case "plus": tempOp = Operation.Plus;
 		break;
@@ -1028,7 +1237,7 @@ public class ComplexFunction implements complex_function{
 		}
 		return tempOp;
 	}
-	
+
 
 	/**
 	 * This is a function return the length of a specific Operation.
@@ -1061,7 +1270,7 @@ public class ComplexFunction implements complex_function{
 		ArrayList<Node> copy =  new ArrayList<Node>();
 		Node temp = new Node();
 		Iterator<Node> iter = cf.iteretor();
-		
+
 		while(iter.hasNext()) {
 			temp=iter.next().copy();
 			copy.add(temp);

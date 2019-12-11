@@ -113,6 +113,7 @@ class Functions_GUITest {
 		cf.div(p1);
 		ans.add(cf.copy());
 		String s = cf.toString();
+		System.out.println(s);
 		function cf5 = cf4.initFromString(s1);
 		function cf6 = cf4.initFromString(s2);
 		ans.add(cf5.copy());

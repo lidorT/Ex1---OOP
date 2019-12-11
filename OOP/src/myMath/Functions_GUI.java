@@ -39,10 +39,7 @@ public class Functions_GUI implements functions{
 
 
 	public boolean contains(Object o) {
-		//if(o instanceof function) {
 		return GuiList.contains(o);
-		//}
-		//else return false;
 	}
 
 

@@ -4,7 +4,6 @@ import org.junit.Test;
 
 public class MonomTestJunit {
 
-	//lidor
 	@Test
 	public void testAdd() {
 		System.out.println("testAdd: ");
