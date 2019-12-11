@@ -1,8 +1,12 @@
 # Read Me
 
-### This is an object oriented programmin project which his main idea is based on functions. 
+#### This is an object oriented programmin project which his main idea is based on functions. 
 
-### On this project you will find three kinds of objects : Monom, Polynom, and Complex Function all of them implements function interface.
+#### On this project you will find three kinds of objects : Monom, Polynom, and Complex Function all of them implements function interface.
+
+#### This project was wrriten by Zohar Meir & Lidor Tal during our Object Oriented Programming course at Ariel University with the guidance of Professor Boaz Ben Moshe all rights reserved to us ©.
+
+#### This project contains an stdDraw interface which was created by Robert Sedgewick and Kevin Wayne ©.
 
 **[Monom -](https://github.com/lidorT/Ex1---OOP/wiki/Monom)** Monom represents a simple "Monom" of shape a*x^b, where a is a real number and b is an integer (summed a none negative). 
 
