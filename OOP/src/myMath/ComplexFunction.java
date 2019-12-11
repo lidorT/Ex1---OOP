@@ -4,6 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ComplexFunction implements complex_function{
 
+	
 	/**
 	 * This class represents a ComplexFunction which is a combination of number of 
 	 * Polynoms at the form of : " Operator(Polynom,Polynom) ".
