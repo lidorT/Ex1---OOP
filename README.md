@@ -22,7 +22,7 @@ for example a string initialize of a Monom: "6.5x^2"
 
 for example a string initialize of a Polynom: "65.25x^4 - 33.5x^3 + 25.2x^2 - 3.3x +5.5 "
 
-for example a string initialize of a Complex Function: " div(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),-1.0x^4 +2.4x^2 +3.1) "
+for example a string initialize of a Complex Function: " div(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.3x +5.0),-1.0x^4 +2.4x^2 +3.1) "
 
 * This project suppourts the option to calculate the Area of a Polynom.
 
