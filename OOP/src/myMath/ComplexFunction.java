@@ -777,14 +777,14 @@ public class ComplexFunction implements complex_function{
 
 			int end = Close_Index(temp);
 			int start = Open_Index(end,temp);
-			int column = Column_Index (end,temp);
-			int Case = Check_case(start,column,end,temp);
+			int comma = comma_Index (end,temp);
+			int Case = Check_case(start,comma,end,temp);
 
 			if(Case == 1){
 
 				tempOp = get_op(start,temp);
-				String s1 = temp.substring(start+1,column);
-				String s2 = temp.substring(column+1,end);
+				String s1 = temp.substring(start+1,comma);
+				String s2 = temp.substring(comma+1,end);
 				Polynom p1 = new Polynom(s1);
 				Polynom p2 = new Polynom(s2);
 				//				int open = Open_Index(start, temp);
@@ -799,7 +799,7 @@ public class ComplexFunction implements complex_function{
 			if(Case == 2){
 
 				tempOp = get_op(start,temp); 
-				String s1 = temp.substring(column+1,end);
+				String s1 = temp.substring(comma+1,end);
 				Polynom p = new Polynom(s1);
 
 				this.PolynomList.get(this.PolynomList.size()-1).setG_op(tempOp);
@@ -810,7 +810,7 @@ public class ComplexFunction implements complex_function{
 			if(Case == 3){
 
 				tempOp = get_op(start,temp); 
-				String s1 = temp.substring(start+1,column);
+				String s1 = temp.substring(start+1,comma);
 				Polynom p = new Polynom(s1);
 				this.PolynomList.get(this.PolynomList.size()-1).setG_op(tempOp);
 
@@ -1078,18 +1078,18 @@ public class ComplexFunction implements complex_function{
 	 * @param str - a String that represent a ComplexFunction.
 	 * @return Open_Index - index of the character ','
 	 */
-	private int Column_Index (int index, String str){
+	private int comma_Index (int index, String str){
 
-		int Column_Index=0;
+		int comma_Index=0;
 		for (int i=index;i>0;i--){
 
 			if (str.charAt(i)==','){
-				Column_Index=i;
+				comma_Index=i;
 				break;
 			}
 		}
 
-		return Column_Index;
+		return comma_Index;
 	}
 
 
@@ -1123,18 +1123,18 @@ public class ComplexFunction implements complex_function{
 	 * 2: Operator("",function3)
 	 * 3: Operator(function4,"")
 	 * @param start - the index of '('
-	 * @param column  - the index of ','
+	 * @param comma  - the index of ','
 	 * @param end - the index of ')'
 	 * @param str - a String that represent a ComplexFunction.
 	 * @return Case - an Integer that represent a case
 	 */
-	private int Check_case(int start,int column,int end, String str){
+	private int Check_case(int start,int comma,int end, String str){
 
 		String temp = str;
 		int Case = 1;
 
-		String s1 = str.substring(start+1, column);
-		String s2 = temp.substring(column+1, end);
+		String s1 = str.substring(start+1, comma);
+		String s2 = temp.substring(comma+1, end);
 
 		if(s1.equals("")) Case=2;
 		if(s2.equals("")) Case=3;
@@ -1155,7 +1155,7 @@ public class ComplexFunction implements complex_function{
 	private boolean CheckString (String s){
 
 		boolean flag = true;
-		if (CheckColumn(s)!=true) flag = false;
+		if (Checkcomma(s)!=true) flag = false;
 		if (CheckOperators(s)!=true) flag = false;
 		return flag;
 	}
@@ -1168,17 +1168,17 @@ public class ComplexFunction implements complex_function{
 	 * @return flag - true, if the string is legal.
 	 * 		   flag - false, if the string is illegal.
 	 */
-	private boolean CheckColumn (String s){
+	private boolean Checkcomma (String s){
 
 		boolean flag = true;
-		int open_counter=0,close_counter=0,column_counter=0;
+		int open_counter=0,close_counter=0,comma_counter=0;
 		for (int i = 0; i < s.length(); i++) {
 			if (s.charAt(i)=='(') open_counter++;
 			if (s.charAt(i)==')') close_counter++;
-			if (s.charAt(i)==',') column_counter++;
+			if (s.charAt(i)==',') comma_counter++;
 		}
-		if (open_counter!=close_counter || open_counter!=column_counter || close_counter != column_counter) flag =false;
-		if (open_counter==0 && column_counter==0 && close_counter==0) flag =false;
+		if (open_counter!=close_counter || open_counter!=comma_counter || close_counter != comma_counter) flag =false;
+		if (open_counter==0 && comma_counter==0 && close_counter==0) flag =false;
 
 		return flag;
 	}
