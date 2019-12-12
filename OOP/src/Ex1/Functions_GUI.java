@@ -4,22 +4,36 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import javafx.scene.text.Font;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException; 
 import java.io.PrintWriter;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileReader;
-import java.util.function.Function;
 
+	/**
+	 * This class implements functions interface, this class main goal is to create a class that will be able to create a plot of the Compelex
+	 * Functions,Polynoms and Monoms.
+	 * This plot could be initialized from a Code or from a text file.
+	 * @author Lidor_t and Zohar_m
+	 */
 	public class Functions_GUI implements functions{
-
-	ArrayList<function> GuiList = new ArrayList<function>();
+		
+	/**
+	 * ArrayList of functions.
+	 */
+	ArrayList<function> GuiList = new ArrayList<function>(); 
+	
+	/**
+	 * Array of Colors
+	 */
 	public static Color[] Colors = {Color.blue, Color.cyan, Color.MAGENTA, Color.ORANGE, 
 			Color.red, Color.GREEN, Color.PINK};
 
-
+	/**
+	 * This functions simply checks if a given function is already
+	 * exist in the array list if it so return false else add her to the array list and return true.
+	 */
 	public boolean add(function e) {
 		if(GuiList.contains(e))
 			return false;
@@ -29,85 +43,111 @@ import java.util.function.Function;
 		}
 	}
 
-
+	/**
+	 * Simply adds all the collection functions into the array list using the add all java utill command.
+	 */
 	public boolean addAll(Collection<? extends function> c) {
 		return GuiList.addAll(c);
 	}
 
-
+	/**
+	 * Simply do the .clear command which will erase all the data inside the array list.
+	 */
 	public void clear() {
 		this.GuiList.clear();
 	}
 
-
+	/**
+	 * simply return the arrayList.contains(O) (java utill command ) 
+	 * in order to check if the array list contains the Object O or not , return true if O is in the list else false.
+	 */
 	public boolean contains(Object o) {
 		return GuiList.contains(o);
 	}
 
-
+	/**
+	 * Same as the above function (contains) the only different is that here we checks about a full collection of functions.
+	 */
 	public boolean containsAll(Collection<?> c) {
 		return GuiList.containsAll(c);
 	}
 
-
+	/**
+	 * check if the array list is empty with the isEmpty of java utill command ture if it empty else false.
+	 */
 	public boolean isEmpty() {
 		return GuiList.isEmpty();
 	}
 
-
+	/**
+	 * Creates an iterator for the Array List.
+	 */
 	public Iterator<function> iterator() {
 		Iterator<function> itr = GuiList.iterator();
 		return itr;
 	}
 
-
+	/**
+	 * Remove an object from the arrayList.
+	 */
 	public boolean remove(Object o) {
 		return GuiList.remove(o);
 	}
 
-
+	/**
+	 * removes all objects inside the collection from the array List.
+	 */
 	public boolean removeAll(Collection<?> c) {
 		return GuiList.removeAll(c);
 	}
 
-
+	/**
+	 * retains only the elements in this list that are contained in the specified collection.
+	 * In other words, removes from this list all of its elements that are not contained 
+	 * in the specified collection.
+	 */
 	public boolean retainAll(Collection<?> c) {
 		return GuiList.retainAll(c);
 	}
 
-
+	/**
+	 * Returns this Arrray list size. 
+	 */
 	public int size() {
 		return GuiList.size();
 	}
 
-
+	/**
+	 * Returns an array containing all of the elements in this list in proper sequence (from first to last element). 
+	 * The returned array will be "safe" in that no references to it are maintained by this list. (In other words,
+	 * this method must a locate a new array). The caller is thus free to modify the returned array.
+	 */
 	public Object[] toArray() {
 		return GuiList.toArray();
 	}
 
-
+	/**
+	 * Returns an array containing all of the elements in this list in proper sequence (from first to last element) 
+	 * The run time type of the returned array is that of the specified array. 
+	 * If the list fits in the specified array, it is returned therein. 
+	 * Otherwise, a new array is a located with the run time type of the specified array and the size of this list. 
+	 * If the list fits in the specified array with room to spare(i.e., the array has more elements than the list),
+	 * the element in the array immediately following the end of the collection is set to null. 
+	 */
 	public <T> T[] toArray(T[] a) {
 		return GuiList.toArray(a);
 	}
 
-
-	public void initFromFile(String s) throws IOException {
-		
-		File temp = new File(s);
-		BufferedReader buffer = new BufferedReader(new FileReader(temp)); 
-
-		String str; 
-		while ((str = buffer.readLine()) != null) {
-			try {
-				this.add(new Polynom(str));
-			}
-			catch (Exception e) {
-				this.add(new ComplexFunction(str));
-			}
-		}
+	/**
+	 * This function receives an Integer i and return ComplexFunction that represent this.GuiList.get(i)
+	 * @param i - an Integer that represent an index of Node in GuiList 
+	 * @return - the function return ComplexFunction that represent GuiList.get(i)
+	 */
+	public ComplexFunction get(int i) {
+		return (ComplexFunction) this.GuiList.get(i);
 	}
-
-
+	
+	
 	public void saveToFile(String file) throws IOException {
 		
 		StringBuilder stringB = new StringBuilder();
@@ -137,14 +177,45 @@ import java.util.function.Function;
 		}
 		
 	}
+	
+	
+	/**
+	 * this functions creates a text file and saves the functions within "this" array list into the text file. 
+	 * First we create an iterator to run all over the array then we create a StringBuilder that checks each 
+	 * object in the array list convert it to string and writes it inside the file if it can't find the file itself 
+	 * we returns it trace in order to locate him.
+	 */
+	public void initFromFile(String s) throws IOException {
+		
+		File temp = new File(s);
+		BufferedReader buffer = new BufferedReader(new FileReader(temp)); 
+		String str; 
+		
+		while ((str = buffer.readLine()) != null) {
+			try {
+				this.add(new Polynom(str));
+			}
+			catch (Exception e) {this.add(new ComplexFunction(str));}
+		}
+	}
 
 
-	public void drawFunctions(int width, int height, Range xRange, Range yRange, int resolution) {
+	/**
+	 * This function draw the functions on the plot we get as input the width height the x and y lines ranges and the resolution. 
+	 * First set the canvas size with the "setCanvasSize" command of java and place as inputs there the width and height we got. 
+	 * After that we set x and y scales with the use of the command setCanvasSize and our inputs are the xRangeand yRange ranges ,
+	 * we insert xRange/yRange.
+	 * get_Min and xRange/yRange.get Max functions, after that we set the Grid with xRange and yRange. 
+	 * After that we set the pen Radius to 0.004 we set a double parameter named step to be xRange.get_max()-xRange.get_min())/resolution 
+	 * this step goal is to create dots each time in order to get a graph the iterator will run after that and pull the color from the array 
+	 * of the colors and set the pen color command after that comes a loop in order to draw each line, save the jpg and we are done.
+	 */
+	public void drawFunctions(int width,int height,Range xRange,Range yRange,int resolution) {
 		
 		int colorIndex = 0;
 		StdDraw.setCanvasSize( width, height);
-		StdDraw.setXscale(xRange.get_min(), xRange.get_max());
-		StdDraw.setYscale(yRange.get_min(), yRange.get_max());
+		StdDraw.setXscale(xRange.get_min(),xRange.get_max());
+		StdDraw.setYscale(yRange.get_min(),yRange.get_max());
 		setGrid(xRange, yRange);
 		StdDraw.setPenRadius(0.005);
 		double step = (xRange.get_max()-xRange.get_min())/resolution;
@@ -167,7 +238,6 @@ import java.util.function.Function;
 				StdDraw.line(x0, y0, x1, y1);
 			}
 		}
-		
 		StdDraw.save("Functions_GUI.jpg");
 	}
 	
@@ -176,34 +246,34 @@ import java.util.function.Function;
 		
 		for(double i = xRange.get_max();i >= xRange.get_min();i--) {
 			
-			StdDraw.setPenColor(Color.gray);
+			StdDraw.setPenColor(Color.black);
 			StdDraw.setPenRadius(0.001);
 			
 			if(i == 0) {
 				
-				StdDraw.setPenColor(Color.black);
+				StdDraw.setPenColor(Color.gray);
 				StdDraw.setPenRadius(0.003);
 			}
 			
-			StdDraw.line(i, yRange.get_min(), i , yRange.get_max());
-			StdDraw.setPenColor(Color.black);
+			StdDraw.line(i,yRange.get_min(),i,yRange.get_max());
+			StdDraw.setPenColor(Color.gray);
 			StdDraw.setPenRadius(0.005);
 			StdDraw.text(i, -0.35, (int)i+"");
 		}
 		
 		for(double i = yRange.get_max();i >= yRange.get_min();i--) {
 			
-			StdDraw.setPenColor(Color.gray);
+			StdDraw.setPenColor(Color.black);
 			StdDraw.setPenRadius(0.001);
 			
 			if(i == 0) {
 				
-				StdDraw.setPenColor(Color.black);
+				StdDraw.setPenColor(Color.gray);
 				StdDraw.setPenRadius(0.003);
 			}
 			
 			StdDraw.line(xRange.get_min(),i,xRange.get_max(), i);
-			StdDraw.setPenColor(Color.black);
+			StdDraw.setPenColor(Color.gray);
 			StdDraw.setPenRadius(0.005);
 			StdDraw.text(-0.3, i, (int)i+"");
 		}
@@ -233,23 +303,24 @@ import java.util.function.Function;
 					int comma = line.indexOf(',');
 					
 					if(line.contains("Width") && variable[0] == -1) {
-						String var = line.substring(colon+1, comma);
+						String var = line.substring(colon+1,comma);
 						variable[0] = Integer.parseInt(var);
 						i++;
 					}
 					
 					else if(line.contains("Height") && variable[1] == -1) {
-						String var = line.substring(colon+1, comma);
+						String var = line.substring(colon+1,comma);
 						variable[1] = Integer.parseInt(var);
 						i++;
 					}
+				
 					
 					else if(line.contains("Resolution") && variable[2] == -1) {
-						String var = line.substring(colon+1, comma);
+						String var = line.substring(colon+1,comma);
 						variable[2] = Integer.parseInt(var);
 						i++;
 					}
-				
+					
 					else if(line.contains("Range_X")) {
 						String varLeft = line.substring(openRange+1,comma);
 						variable[3] = Integer.parseInt(varLeft);
@@ -274,7 +345,6 @@ import java.util.function.Function;
 				}
 			}
 		}	
-				
 		 catch (IOException e) {
 				e.printStackTrace();
 				System.out.println(e);
@@ -282,13 +352,7 @@ import java.util.function.Function;
 		
 		Range rx = new Range(variable[3], variable[4]);
 		Range ry = new Range(variable[5], variable[6]);
-		
 		drawFunctions(variable[0], variable[1], rx, ry, variable[2]);
-
-	}
-
-	public ComplexFunction get(int i) {
-		return (ComplexFunction) GuiList.get(i);
 	}
 
 
