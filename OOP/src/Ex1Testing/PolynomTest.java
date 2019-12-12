@@ -1,8 +1,12 @@
-package myMath;
+package Ex1Testing;
 
 import org.junit.Test;
 
-public class PolynomTestJunit {
+import Ex1.Monom;
+import Ex1.Polynom;
+import Ex1.Polynom_able;
+
+public class PolynomTest {
 	
 	@Test
 	public void testFx(){

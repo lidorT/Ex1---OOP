@@ -1,8 +1,11 @@
-package myMath;
+package Ex1Testing;
 
 import org.junit.Test;
 
-public class MonomTestJunit {
+import Ex1.Monom;
+import Ex1.function;
+
+public class MonomTest {
 
 	@Test
 	public void testAdd() {

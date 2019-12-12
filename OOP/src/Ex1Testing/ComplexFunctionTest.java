@@ -1,6 +1,12 @@
-package myMath;
+package Ex1Testing;
 
 import org.junit.Test;
+
+import Ex1.ComplexFunction;
+import Ex1.Monom;
+import Ex1.Operation;
+import Ex1.Polynom;
+import Ex1.function;
 
 /**
  * @author Lidor_t and Zohar_m
@@ -10,20 +16,20 @@ public class ComplexFunctionTest {
 
 	
 	/**
-	 * Test method for {@link myMath.ComplexFunction#ComplexFunction()}.
+	 * Test method for {@link Ex1.ComplexFunction#ComplexFunction()}.
 	 */
 	@Test
-	public void testComplexFunction() {
+	public void ComplexFunction() {
 		ComplexFunction cf = new ComplexFunction();
 		
 	}
 
 	
 	/**
-	 * Test method for {@link myMath.ComplexFunction#ComplexFunction(myMath.Polynom)}.
+	 * Test method for {@link Ex1.ComplexFunction#ComplexFunction(Ex1.Polynom)}.
 	 */
 	@Test
-	public void test_ComplexFunction_Polynom() {
+	public void ComplexFunction_Polynom() {
 		
 		System.out.println("ComplexFunction(Polynom p): ");
 		
@@ -43,10 +49,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#ComplexFunction(myMath.function, myMath.Operation, myMath.function)}.
+	 * Test method for {@link Ex1.ComplexFunction#ComplexFunction(Ex1.function, Ex1.Operation, Ex1.function)}.
 	 */
 	@Test
-	public void test_ComplexFunction_Function_Operation_Function() {
+	public void ComplexFunction_Function_Operation_Function() {
 		
 		System.out.println("ComplexFunction(Function f1,Operation op,Function f2): ");
 		
@@ -69,10 +75,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#ComplexFunction(java.lang.String, myMath.function, myMath.function)}.
+	 * Test method for {@link Ex1.ComplexFunction#ComplexFunction(java.lang.String, Ex1.function, Ex1.function)}.
 	 */
 	@Test
-	public void test_ComplexFunction_String_Function_Function() {
+	public void ComplexFunction_String_Function_Function() {
 		
 		System.out.println("ComplexFunction(String s,Function f1,Function f2): ");
 		
@@ -99,10 +105,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#ComplexFunction(myMath.function, myMath.Operation)}.
+	 * Test method for {@link Ex1.ComplexFunction#ComplexFunction(Ex1.function, Ex1.Operation)}.
 	 */
 	@Test
-	public void test_ComplexFunction_Function_Operation() {
+	public void ComplexFunction_Function_Operation() {
 		
 		System.out.println("ComplexFunction(Function f,Operation op): ");
 		
@@ -123,10 +129,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#ComplexFunction(java.lang.String)}.
+	 * Test method for {@link Ex1.ComplexFunction#ComplexFunction(java.lang.String)}.
 	 */
 	@Test
-	public void test_ComplexFunction_String() {
+	public void ComplexFunction_String() {
 		
 		System.out.println("ComplexFunction(String s): ");
 		
@@ -142,10 +148,10 @@ public class ComplexFunctionTest {
 }
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#ComplexFunction(myMath.function)}.
+	 * Test method for {@link Ex1.ComplexFunction#ComplexFunction(Ex1.function)}.
 	 */
 	@Test
-	public void test_ComplexFunction_Function() {
+	public void ComplexFunction_Function() {
 		
 		System.out.println("ComplexFunction(Function): ");
 		
@@ -164,10 +170,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#plus(myMath.function)}.
+	 * Test method for {@link Ex1.ComplexFunction#plus(Ex1.function)}.
 	 */
 	@Test
-	public void testPlus() {
+	public void Plus() {
 		
 		System.out.println("plus: ");
 		
@@ -188,10 +194,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#mul(myMath.function)}.
+	 * Test method for {@link Ex1.ComplexFunction#mul(Ex1.function)}.
 	 */
 	@Test
-	public void testMul() {
+	public void Mul() {
 		
 		System.out.println("mul: ");
 		
@@ -216,10 +222,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#div(myMath.function)}.
+	 * Test method for {@link Ex1.ComplexFunction#div(Ex1.function)}.
 	 */
 	@Test
-	public void testDiv() {
+	public void Div() {
 		
 		System.out.println("Div: ");
 		
@@ -244,10 +250,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#max(myMath.function)}.
+	 * Test method for {@link Ex1.ComplexFunction#max(Ex1.function)}.
 	 */
 	@Test
-	public void testMax() {
+	public void Max() {
 		
 		System.out.println("Max: ");
 		
@@ -272,10 +278,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#min(myMath.function)}.
+	 * Test method for {@link Ex1.ComplexFunction#min(Ex1.function)}.
 	 */
 	@Test
-	public void testMin() {
+	public void Min() {
 		
 		System.out.println("Min: ");
 		
@@ -300,10 +306,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#comp(myMath.function)}.
+	 * Test method for {@link Ex1.ComplexFunction#comp(Ex1.function)}.
 	 */
 	@Test
-	public void testComp() {
+	public void Comp() {
 		
 		System.out.println("comp: ");
 		
@@ -328,10 +334,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#left()}.
+	 * Test method for {@link Ex1.ComplexFunction#left()}.
 	 */
 	@Test
-	public void testLeft() {
+	public void Left() {
 		
 		System.out.println("Left: ");
 		
@@ -353,10 +359,10 @@ public class ComplexFunctionTest {
 
 	
 	/**
-	 * Test method for {@link myMath.ComplexFunction#right()}.
+	 * Test method for {@link Ex1.ComplexFunction#right()}.
 	 */
 	@Test
-	public void testRight() {
+	public void Right() {
 		
 		System.out.println("Right: ");
 		
@@ -378,10 +384,10 @@ public class ComplexFunctionTest {
 
 	
 	/**
-	 * Test method for {@link myMath.ComplexFunction#getOp()}.
+	 * Test method for {@link Ex1.ComplexFunction#getOp()}.
 	 */
 	@Test
-	public void test_getOp() {
+	public void getOp() {
 		
 		System.out.println("get_op: ");
 		
@@ -415,10 +421,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#copy()}.
+	 * Test method for {@link Ex1.ComplexFunction#copy()}.
 	 */
 	@Test
-	public void testCopy() {
+	public void Copy() {
 		
 		System.out.println("copy(): ");
 		
@@ -435,10 +441,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#f(double)}.
+	 * Test method for {@link Ex1.ComplexFunction#f(double)}.
 	 */
 	@Test
-	public void test_Fx() {
+	public void Fx() {
 		
 		System.out.println("f(x): ");
 		
@@ -464,10 +470,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#initFromString(java.lang.String)}.
+	 * Test method for {@link Ex1.ComplexFunction#initFromString(java.lang.String)}.
 	 */
 	@Test
-	public void testInitFromString() {
+	public void InitFromString() {
 		
 		System.out.println("InitFromString: ");
 		
@@ -490,10 +496,10 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#toString()}.
+	 * Test method for {@link Ex1.ComplexFunction#toString()}.
 	 */
 	@Test
-	public void testToString() {
+	public void ToString() {
 
 		System.out.println("toString: ");
 		
@@ -529,7 +535,7 @@ public class ComplexFunctionTest {
 	}
 
 	/**
-	 * Test method for {@link myMath.ComplexFunction#equals(java.lang.Object)}.
+	 * Test method for {@link Ex1.ComplexFunction#equals(java.lang.Object)}.
 	 */
 	@Test
 	public void Equals() {

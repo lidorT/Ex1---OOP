@@ -5,4 +5,4 @@
  * @author user
  *
  */
-package myMath;
+package Ex1;

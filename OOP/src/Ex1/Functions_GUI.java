@@ -148,6 +148,13 @@ import java.io.FileReader;
 	}
 	
 	
+	/**
+	 * This function is saving the string values into a file, in order to do so we created a StringBuilder named strBuilder, 
+	 * after that we created a function iterator and running on all the functions each time we find a function we area appending
+	 * the functions.toString after that we are using append to "\n" to get a line between each functions we used try and catch
+	 * and there we created a new PrintWriter and there we try to write using the string builder we made if we succeed then all
+	 * good if catch appear we print stack trace.
+	 */
 	public void saveToFile(String file) throws IOException {
 		
 		StringBuilder stringB = new StringBuilder();
@@ -242,6 +249,14 @@ import java.io.FileReader;
 	}
 	
 	
+	/**
+	 * This function goal is to set the grids of the plot. 
+	 * We gets as an input the x range and the y ranges. 
+	 * First we create a loop to run on the y axis therefore we start the loop at yRange.Max  till we get to yRange.Max.Min , 
+	 * each run i will be -- we set the pen color and radius after that we do the same for the x axis.
+	 * @param xRange
+	 * @param yRange
+	 */
 	private void setGrid(Range xRange, Range yRange) {
 		
 		for(double i = xRange.get_max();i >= xRange.get_min();i--) {
@@ -282,7 +297,11 @@ import java.io.FileReader;
 	
 	
 
-
+	/**
+	 * This function goal is to is to read from the json file the require parameters in order to send drawFunctions , 
+	 * we set parameters for column comma '[' and ']' we search inside the file for strings such as "width" "height" "Resolution" 
+	 * and ranges of x and y after having this set the right parameters to the values from the file and sends it back to drawFunctions function
+	 */
 	public void drawFunctions(String json_file) {
 
 		int i = 0;
