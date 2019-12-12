@@ -1,9 +1,9 @@
-package myMath;
+package Ex1;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import myMath.Monom;
+import Ex1.Monom;
 
 /**
  * This class represents a Polynom with add, multiply functionality, it also
@@ -19,7 +19,7 @@ public class Polynom implements Polynom_able {
 
 
 	/**
-	 * Monoms_List is an arrayList of Monoms in order to storage for each Polynom his monoms.
+	 * Monoms_List is an arrayList of Monoms in order to storage for each Polynom his Monoms.
 	 */
 	private ArrayList<Monom> Monoms_List = new ArrayList<>(); 
 	
@@ -37,7 +37,6 @@ public class Polynom implements Polynom_able {
 		this.Monoms_List.add(new Monom(0, 0));
 		
 	}
-
 	
 	public function initFromString(String s){
 		
@@ -55,9 +54,9 @@ public class Polynom implements Polynom_able {
 	
 	/**
 	 * Init a Polynom from a String such as: {"x", "3+1.4x^3-34x","3x^3+2x-5"}.
-	 * This constructor runs on the string and save each monom, we know to divide them when we find the characters "-" or "+".
+	 * This constructor runs on the string and save each Monom, we know to divide them when we find the characters "-" or "+".
 	 * After that we save them in a string array including the "-" and "+" characters,
-	 * Then we send each index to the monom constructor and storage them inside the polynom's ArrayList of Monoms(Monom_list).
+	 * Then we send each index to the Monom constructor and storage them inside the polynom's ArrayList of Monoms(Monom_list).
 	 * @param s - a string represents a Polynom. 
 	 */
 	public Polynom(String s) {
@@ -120,9 +119,9 @@ public class Polynom implements Polynom_able {
 
 	
 	/**
-	 * This function calculating the sum of two polynoms and combine them into the current polynom.
-	 * This function receives an object of the type Polynom_able and combine it with the current polynom.
-	 * @param p1 - the polynom_able we want to add into the current polynom
+	 * This function calculating the sum of two Polynoms and combine them into the current Polynom.
+	 * This function receives an object of the type Polynom_able and combine it with the current Polynom.
+	 * @param p1 - the polynom_able we want to add into the current Polynom
 	 */
 	public void add(Polynom_able p1) {
 		Iterator<Monom> iterMonom = p1.iteretor();
@@ -259,7 +258,7 @@ public class Polynom implements Polynom_able {
 	
 
 	/** 
-	 * This function calculate the root of a polynom
+	 * This function calculate the root of a Polynom
 	 * 
 	 */
 	public double root(double x0, double x1, double eps) {
@@ -287,9 +286,9 @@ public class Polynom implements Polynom_able {
 
 	/**
 	 * This function performs a deep copy of a given Polynom and transform it to a Polynom_able.
-	 * we create Polynom_able p1 in order to copy the current polynom to p1.
-	 * iterpoly is an iterator that run on the current polynom. we build a new
-	 * monom m that holds the current polynom's monom and add it to p1.
+	 * we create Polynom_able p1 in order to copy the current Polynom to p1.
+	 * iterpoly is an iterator that run on the current Polynom. we build a new
+	 * Monom m that holds the current polynom's Monom and add it to p1.
 	 */
 	public Polynom_able copy() {
 		Polynom_able p1 = new Polynom();
@@ -303,9 +302,9 @@ public class Polynom implements Polynom_able {
 
 
 	/**
-	 * This function derivative the current polynom and returns it as a Polynom_able.
-	 * we build 1 iterator for the current polynom in order to run on the
-	 * polynom monoms. m is a monom of Polynom, we send him to monom's
+	 * This function derivative the current Polynom and returns it as a Polynom_able.
+	 * we build 1 iterator for the current Polynom in order to run on the
+	 * Polynom Monoms. m is a Monom of Polynom, we send him to monom's
 	 * derivative method and save him in the Polynom_able p1. in the end we
 	 * return p1
 	 */
@@ -322,9 +321,9 @@ public class Polynom implements Polynom_able {
 	
 
 	/**
-	 * This method calculate the area of a given polynom using the Riemann's integral from x0 to x1 in eps steps.
+	 * This method calculate the area of a given Polynom using the Riemann's integral from x0 to x1 in epsilon steps.
 	 * First of all we check if f(x0) and f(x1) are lower than 0 and if they are we throw RuntimeExeption.
-	 * After that we calculate the are of the polynom by eps steps.
+	 * After that we calculate the are of the Polynom by epsilon steps.
 	 */
 	public double area(double x0, double x1, double eps) {
 		double sum = 0;
@@ -355,7 +354,7 @@ public class Polynom implements Polynom_able {
 	}
 	
 
-	/**This function gets a monom and multiply it with the current Polynom.
+	/**This function gets a Monom and multiply it with the current Polynom.
 	 * @param m1 - a given Monom which will multiply with the current Polynom.
 	 */
 	public void multiply(Monom m1) {
