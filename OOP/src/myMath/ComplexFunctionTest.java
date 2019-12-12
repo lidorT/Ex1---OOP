@@ -2,7 +2,6 @@ package myMath;
 
 import org.junit.Test;
 
-
 /**
  * @author Lidor_t and Zohar_m
  *

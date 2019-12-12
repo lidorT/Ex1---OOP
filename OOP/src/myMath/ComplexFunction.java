@@ -803,6 +803,7 @@ public class ComplexFunction implements complex_function{
 				if(witchArray == 0)this.PolynomList.add(tempNodeC);
 			}	
 
+			
 			if(Case == 2){
 
 				tempOp = get_op(start,temp); 
