@@ -171,7 +171,7 @@ public class Monom implements function {
 						if(n1.length() == 1){
 							n1 = "-1"; //case if we have +coefficient
 						}
-						else n1 = n1.substring(1);
+						else n1 = n1.substring(0,i);
 
 					}
 

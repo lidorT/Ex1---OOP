@@ -752,10 +752,10 @@ public class ComplexFunction implements complex_function{
 	 */
 	public function initFromString(String s) {
 
-		s=s.toLowerCase();
-		s=clear_spaces(s);
+		s = s.toLowerCase();
+		s = clear_spaces(s);
 
-		if (CheckString(s)==false ) {
+		if (CheckString(s) == false ) {
 
 			try{
 				Polynom p = new Polynom(s);
@@ -766,12 +766,23 @@ public class ComplexFunction implements complex_function{
 
 			Polynom p = new Polynom(s);
 			Node answer = new Node(p,Operation.None,null,Operation.None);
-			this.PolynomList.add(answer);
-			return this;
+			if(this.PolynomList.isEmpty()){
+				this.PolynomList.add(answer);
+				return this;
+			}
+			else{
+				ComplexFunction cf = new ComplexFunction();
+				cf.PolynomList.add(answer);
+				return cf;
+			}
+			
 		}
 
 		String temp = s;
 		Operation tempOp =Operation.None;
+		int witchArray = 0;
+		if(!this.PolynomList.isEmpty()) witchArray = 1;
+		ComplexFunction cf = new ComplexFunction();
 
 		while(temp.length() != 0) {
 
@@ -781,19 +792,15 @@ public class ComplexFunction implements complex_function{
 			int Case = Check_case(start,comma,end,temp);
 
 			if(Case == 1){
-
+				int sss=4;
 				tempOp = get_op(start,temp);
 				String s1 = temp.substring(start+1,comma);
 				String s2 = temp.substring(comma+1,end);
 				Polynom p1 = new Polynom(s1);
 				Polynom p2 = new Polynom(s2);
-				//				int open = Open_Index(start, temp);
-				//				int length = get_op_length(open,temp);
-				//				if(temp.charAt(start-length-1) == '('){
-				//					this.PolynomList.get(this.PolynomList.size()-1).setG_op(get_op(open,temp));
-				//				}
 				Node tempNodeC = new Node(p1, tempOp, p2, Operation.None);
-				this.PolynomList.add(tempNodeC);
+				if(witchArray == 1)cf.PolynomList.add(tempNodeC);
+				if(witchArray == 0)this.PolynomList.add(tempNodeC);
 			}	
 
 			if(Case == 2){
@@ -802,9 +809,11 @@ public class ComplexFunction implements complex_function{
 				String s1 = temp.substring(comma+1,end);
 				Polynom p = new Polynom(s1);
 
-				this.PolynomList.get(this.PolynomList.size()-1).setG_op(tempOp);
+				if(witchArray == 1)cf.PolynomList.get(cf.PolynomList.size()-1).setG_op(tempOp);
+				if(witchArray == 0)this.PolynomList.get(this.PolynomList.size()-1).setG_op(tempOp);
 				Node tempNodeC = new Node(null,Operation.None,p,Operation.None);
-				this.PolynomList.add(tempNodeC);
+				if(witchArray == 1)cf.PolynomList.add(tempNodeC);
+				if(witchArray == 0)this.PolynomList.add(tempNodeC);
 			}
 
 			if(Case == 3){
@@ -812,14 +821,25 @@ public class ComplexFunction implements complex_function{
 				tempOp = get_op(start,temp); 
 				String s1 = temp.substring(start+1,comma);
 				Polynom p = new Polynom(s1);
-				this.PolynomList.get(this.PolynomList.size()-1).setG_op(tempOp);
+				
+				if(witchArray == 1)cf.PolynomList.get(cf.PolynomList.size()-1).setG_op(tempOp);
+				if(witchArray == 0)this.PolynomList.get(this.PolynomList.size()-1).setG_op(tempOp);
 
 				Node tempNodeC = new Node(p,Operation.None,null,Operation.None);
-				this.PolynomList.add(tempNodeC);
+				if(witchArray == 1)cf.PolynomList.add(tempNodeC);
+				if(witchArray == 0)this.PolynomList.add(tempNodeC);
 
 				if (tempOp == Operation.Divid) {
-					this.DivQ.add(this.PolynomList.size()-1);
+					if(witchArray == 1)cf.DivQ.add(this.PolynomList.size()-1);
+					if(witchArray == 0)this.DivQ.add(this.PolynomList.size()-1);
+					
 				}
+			}
+			
+			if(Case == 4){
+				tempOp = get_op(start,temp);
+				if(witchArray == 1)cf.PolynomList.get(cf.PolynomList.size()-2).setG_op(tempOp);
+				if(witchArray == 0)this.PolynomList.get(this.PolynomList.size()-2).setG_op(tempOp);
 			}
 
 			int length = get_op_length(start,temp);
@@ -829,6 +849,9 @@ public class ComplexFunction implements complex_function{
 		this.left = this.left();
 		this.right = this.right();
 		this.op = this.getOp();
+		
+		if(witchArray == 1)return cf;
+		if(witchArray == 0)return this;
 
 		return this;
 	}
@@ -912,27 +935,51 @@ public class ComplexFunction implements complex_function{
 			ans = temp.left.toString();
 		if(temp.left == null && temp.right!=null)
 			ans = temp.right.toString();
-		if(temp.left!=null && temp.right!=null)
-			ans = temp.P_op.toString() +"("+ temp.left.toString()+","+temp.right.toString()+")";
-
+		if(temp.left!=null && temp.right!=null){
+			String s = EnumToString(temp.P_op);
+			ans = s +"("+ temp.left.toString()+","+temp.right.toString()+")";
+		}
 		while(iter.hasNext()) {
 
-			Operation op = temp.G_op;
+			String s = EnumToString(temp.G_op);
 			temp = iter.next();
 
 			if(temp.right == null)
-				ans = op.toString() +"("+ temp.left.toString()+","+ans+")";
+				ans = s +"("+ temp.left.toString()+","+ans+")";
 
 			if(temp.left == null)
-				ans = op.toString() +"("+ans+","+ temp.right.toString()+")";
+				ans = s +"("+ans+","+ temp.right.toString()+")";
 
 			if(temp.left!=null && temp.right!=null){
-				ans = op.toString() +
-						"("+ans+","+temp.P_op.toString()+"("+ temp.left.toString()+","
+				ans = s + "("+ans+","+temp.P_op.toString()+"("+ temp.left.toString()+","
 						+temp.right.toString()+")"+")";
 			}
 		}
 		return ans;
+	}
+	
+	public String EnumToString(Operation op){
+		
+		String tempOp ;
+
+		switch(op) {
+		case Plus:tempOp = "plus";
+		break;
+		case Times:tempOp = "mul";
+		break;
+		case  Divid:tempOp = "div";
+		break;
+		case  Min:tempOp = "min";
+		break;
+		case  Max:tempOp = "max";
+		break;
+		case  Comp:tempOp = "comp";
+		break;
+		case  None:tempOp = "none";
+		break;
+		default: tempOp = "Error";
+		}
+		return tempOp;
 	}
 
 
@@ -1112,7 +1159,7 @@ public class ComplexFunction implements complex_function{
 		temp=str.substring(Index-4,Index);
 		if (temp.equals("plus")) return Operation.Plus;
 		if (temp.equals("comp")) return Operation.Comp;
-
+	
 		return Operation.None;
 	}
 

@@ -29,7 +29,7 @@ import myMath.functions;
 
 	public class Functions_GUITest {
 	
-	public static void main(String[] a) {
+	public static void main(String[] a) throws IOException {
 		
 		functions data = FunctionsFactory();
 		int w=1000, h=600, res=200;
@@ -39,16 +39,24 @@ import myMath.functions;
 		String file = "function_file.txt";
 		String file2 = "function_file2.txt";
 	
+		
+		data.saveToFile(file);
+		Functions_GUI data2 = new Functions_GUI();
+		data2.initFromFile(file);
+		data2.saveToFile(file2);
+		data2.drawFunctions(w,h,rx,ry,res);
 		try {
-			data.saveToFile(file);
-			Functions_GUI data2 = new Functions_GUI();
-			data2.initFromFile(file);
-			data.saveToFile(file2);
+			//data.saveToFile(file);
+			//Functions_GUI data2 = new Functions_GUI();
+			//data2.initFromFile(file);
+			//data2.saveToFile(file2);
+			//data2.drawFunctions(w,h,rx,ry,res);
+			//data.saveToFile(file2);
 		}
 		catch(Exception e) {e.printStackTrace();}
 
 		String JSON_param_file = "GUI_params.txt";
-		data.drawFunctions(JSON_param_file);
+		//data.drawFunctions(JSON_param_file);
 	}
 		
 		
@@ -108,7 +116,7 @@ import myMath.functions;
 	}
 	
 	
-	@Test
+	//@Test
 	public void SaveToAndInitFromFile()throws IOException {
 		
 		Functions_GUI fg1 = new Functions_GUI();
@@ -138,7 +146,7 @@ import myMath.functions;
 	}
 	
 	
-	@Test
+	//@Test
 	public void Equals() {
 		
 		functions fg = FunctionsFactory();
@@ -147,22 +155,22 @@ import myMath.functions;
 		assertFalse(_data.equals(fg));
 	}
 
-	@Test
+	//@Test
 	public void DrawFunctions() {
 		
 		Range rx = new Range(-10, 10);
 		Range ry = new Range(-10, 10);
-		_data.drawFunctions(1000, 600, rx, ry, 200);
+		//_data.drawFunctions(1000, 600, rx, ry, 200);
 	}
 
-	@Test
+	//@Test
 	public void DrawFunctionsJSON() {
-		_data.drawFunctions("GUI_params.txt");
+		//_data.drawFunctions("GUI_params.txt");
 	}
 	
 	
 	
-	public static functions FunctionsFactory() {
+	public static functions FunctionsFactory(){
 		
 		functions ans = new Functions_GUI();
 		String s1 = "3.1 +2.4x^2 -x^4";
@@ -171,14 +179,18 @@ import myMath.functions;
 		Polynom p1 = new Polynom(s1);
 		Polynom p2 = new Polynom(s2);
 		Polynom p3 = new Polynom(s3[0]);
+		Polynom p4 = new Polynom("x^3+2x+19");
+		Polynom p5 = new Polynom("x^3+2x^2+x+3");
+		ComplexFunction cf2 = new ComplexFunction(p4,Operation.Max,p5);
 		ComplexFunction cf3 = new ComplexFunction(p3);
 		for(int i=1;i<s3.length;i++) {
 			cf3.mul(new Polynom(s3[i]));
 		}
-
+		
+		ans.add(cf2);
 		ComplexFunction cf = new ComplexFunction(p1,Operation.Plus,p2);
 		ComplexFunction cf4 = new ComplexFunction("div", new Polynom("x +1"),cf3);
-		cf4.plus(new Monom("2"));
+		cf4.plus(new Monom("2x"));
 		ans.add(cf.copy());
 		ans.add(cf4.copy());
 		cf.div(p1);
@@ -199,6 +211,8 @@ import myMath.functions;
 		}
 		ans.add(max);
 		ans.add(min);
+		
+		System.out.println(ans.toString());
 		return ans;
 	}
 	

@@ -11,7 +11,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileReader;
 
-public class Functions_GUI implements functions{
+	public class Functions_GUI implements functions{
 
 	ArrayList<function> GuiList = new ArrayList<function>();
 	public static Color[] Colors = {Color.blue, Color.cyan, Color.MAGENTA, Color.ORANGE, 
