@@ -1,4 +1,4 @@
-package myMath;
+package Ex1;
 
 import java.util.Comparator;
 
@@ -28,7 +28,7 @@ public class Monom implements function {
 	 * @param b - Integer
 	 */
 	public Monom(double a, int b) { // ax^b
-		
+
 		if (a!=0) {
 			String str = Double.toString(a);
 			str=String.format("%.5g%n",a);
@@ -89,7 +89,7 @@ public class Monom implements function {
 		return ans;
 	}
 
-	
+
 	/**
 	 * @return boolean - true,if this Monom is zero
 	 * @return boolean - false,if this Monom is not a zero Monom
@@ -129,10 +129,10 @@ public class Monom implements function {
 	 * @param s - given string that should present a Monom.
 	 */
 	public Monom(String s) {
-		
+
 		s = s.toLowerCase();
 		s=clear_spaces(s);
-		
+
 		String err = "ERROR, Invalid input: required ax^b, where a is a real number and b is an integer (summed a none negative)";
 
 		boolean flag = false, pow = false;
@@ -151,7 +151,7 @@ public class Monom implements function {
 
 		if (counter_pow < 2 && counter_x < 2) {
 
-			if (flag && pow) { ///// if we have 'x' and '^' in String s
+			if (flag && pow) {      /////case 1:  if we have 'x' and '^' in String s
 				i=s.indexOf('x');
 				j=s.indexOf('^');
 
@@ -161,7 +161,7 @@ public class Monom implements function {
 
 					if(n1.charAt(0) == '+'){
 						if(n1.length() == 1){
-							n1 = "1"; //case if we have +coefficient
+							n1 = "1"; //case 1.1: if we have +coefficient
 						}
 						else n1 = n1.substring(1);
 					}
@@ -169,7 +169,7 @@ public class Monom implements function {
 					if (n1.charAt(0)=='-'){
 
 						if(n1.length() == 1){
-							n1 = "-1"; //case if we have +coefficient
+							n1 = "-1"; //case 1.2: if we have +coefficient
 						}
 						else n1 = n1.substring(0,i);
 
@@ -193,20 +193,20 @@ public class Monom implements function {
 				}
 			} 
 			else {
-				if (flag && !pow) { ///// if there is only 'x' and no '^'
+				if (flag && !pow) {		 /////case 2: if there is only 'x' and no '^'
 
 					this.set_power(1);
 					i = s.indexOf('x');
 					if (i == 0) {
-						this.set_coefficient(1); ///// if the string include only 'x'
+						this.set_coefficient(1); /////case 2.1: if the string include only 'x'
 					} else {
 						String n1 = s.substring(0, i);
 						if (n1.equals("-")) {
-							this.set_coefficient(-1); ///// if the string include only '-x'
+							this.set_coefficient(-1); /////case 2.2: if the string include only '-x'
 
 						}
 						if (n1.equals("+")) {
-							this.set_coefficient(1); // if the string include only '+x'
+							this.set_coefficient(1); /////case 2.3:  if the string include only '+x'
 						}
 						else if(n1.equals("+")==false && n1.equals("-")==false){
 							if (isDouble(n1)){
@@ -222,7 +222,7 @@ public class Monom implements function {
 				}
 			}
 
-			if (!flag && !pow) { ///// if the String is only a real number
+			if (!flag && !pow) { ///// case 3: if the String is only a real number
 
 				this.set_power(0);
 				boolean intOrdouble = true;
@@ -269,7 +269,7 @@ public class Monom implements function {
 		}
 	}
 
-	
+
 	/**
 	 *This function subtracts two Monoms.
 	 *If the two Monoms powers are not equal it throws RuntimeException.
@@ -286,12 +286,12 @@ public class Monom implements function {
 		}
 	}
 
-	
+
 	/**
 	 * This function multiply the current Monom with the given one.
-	 * If one of the monoms is a zero we set the current one to be a zero Monom.
-	 * Else we get the coefficients and the powers of both monoms,multiply them and set the results respectively to the current Monom.
-	 * @param d - Given monom that will be multiplied with the current Monom.
+	 * If one of the Monoms is a zero we set the current one to be a zero Monom.
+	 * Else we get the coefficients and the powers of both Monoms,multiply them and set the results respectively to the current Monom.
+	 * @param d - Given Monom that will be multiplied with the current Monom.
 	 */
 	public void multiply(Monom d) {
 
@@ -311,9 +311,9 @@ public class Monom implements function {
 		}
 	}
 
-	
+
 	/**
-	 * This function prints as a string the current monom.
+	 * This function prints as a string the current Monom.
 	 */
 	public String toString() {
 		if (this._power == 0) {
@@ -330,7 +330,7 @@ public class Monom implements function {
 
 
 	/**
-	 * This function checks if two monoms are equals.
+	 * This function checks if two Monoms are equals.
 	 * We create two strings and convert the Monoms into strings using the toString<object> function.
 	 * If the two strings are the same it returns true , else false.
 	 * @param m - a given Monom which will be compared to the current Monom.
@@ -364,8 +364,8 @@ public class Monom implements function {
 	// ****************** Private Methods and Data *****************
 	// *************************************************************
 
-	
-	
+
+
 	/**
 	 * This is a private function that checks if a given string is a double or not.
 	 * If the given string is a double the function returns true, else it returns false.
@@ -382,7 +382,7 @@ public class Monom implements function {
 		return ans;
 	}
 
-	
+
 	/**
 	 * This is a private function that checks if a given string is an Integer or not.
 	 * If the given string is an Integer the function returns true, else it returns false.
@@ -393,24 +393,22 @@ public class Monom implements function {
 		boolean ans = true;
 		try {
 			int d = new Integer(s);
-		} catch (Exception e) {
-			ans = false;
-		}
+		} catch (Exception e) {ans = false;}
 		return ans;
 	}
 
-	
+
 	/**
-	 * private method to set a coefficient of a monom
+	 * private method to set a coefficient of a Monom
 	 * @param a - a double input that will be set as the current Monom coefficient.
 	 */
 	private void set_coefficient(double a) {
 		this._coefficient = a;
 	}
 
-	
+
 	/**
-	 * private method to set a power of a monom
+	 * private method to set a power of a Monom
 	 * @param a - an Integer input that will be set as the current Monom power.
 	 */
 	private void set_power(int p) {
@@ -420,7 +418,7 @@ public class Monom implements function {
 		this._power = p;
 	}
 
-	
+
 	/**
 	 * This function gets a string and returns it without spaces 
 	 * for example:
@@ -433,8 +431,8 @@ public class Monom implements function {
 		s=s.replaceAll(" ","");
 		return s;
 	}
-	
-	
+
+
 	/**
 	 * This function generate a Zero monom (0.0,0)
 	 * @return Zero Monom
